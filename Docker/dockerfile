@@ -1,0 +1,37 @@
+FROM golang:1.14 as builder
+
+ARG BRANCH=master
+ARG NODEPATH=/lotus
+
+WORKDIR ${NODEPATH}
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
+
+RUN git clone --single-branch --branch $BRANCH https://github.com/filecoin-project/lotus.git ${NODEPATH}
+RUN make all && make install
+
+
+# Create final container
+FROM ubuntu:20.04
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
+
+COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
+
+RUN printf "#!/bin/bash \
+\n# Run lotus daemon \
+\n lotus daemon & \
+\n sleep 30 \
+\n peers='lotus net peers | wc -l' \
+\n while [[ eval $peers -eq 0 ]] \
+\n do \
+\n sleep 5 \
+\n done \
+\n lotus sync wait\n" > /start.sh
+
+RUN chmod +x /start.sh
+
+CMD /start.sh && bash
