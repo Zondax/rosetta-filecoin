@@ -31,7 +31,7 @@ endif
 
 define run_docker
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
-	-v $(shell pwd)/data:/root \
+	-v $(shell pwd)/data:/data \
 	-d \
 	--name $(CONTAINER_NAME) \
 	$(DOCKER_IMAGE) \

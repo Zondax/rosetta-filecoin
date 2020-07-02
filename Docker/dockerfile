@@ -21,6 +21,11 @@ RUN apt update && apt install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-open
 
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 
+RUN mkdir -p /data/{node,storage}
+
+ENV LOTUS_PATH=/data/node/
+ENV $LOTUS_STORAGE_PATH=/data/storage/
+
 RUN printf "#!/bin/bash \
 \n# Run lotus daemon \
 \n lotus daemon & \
