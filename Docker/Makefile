@@ -20,6 +20,7 @@ DOCKER_IMAGE=lotus:latest
 CONTAINER_NAME=lotusnode
 
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
+ROSETTA_PORT=8080
 
 ifdef INTERACTIVE
 INTERACTIVE_SETTING:="-i"
@@ -32,10 +33,9 @@ endif
 define run_docker
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
 	-v $(shell pwd)/data:/data \
-	-d \
 	--name $(CONTAINER_NAME) \
-	$(DOCKER_IMAGE) \
-	"$(2)"
+	-p $(ROSETTA_PORT):8080 \
+	$(DOCKER_IMAGE)
 endef
 
 define kill_docker
@@ -49,7 +49,8 @@ endef
 all: build
 
 build_docker:
-	docker build --rm  -f dockerfile -t $(DOCKER_IMAGE) .
+	docker build \
+    -f dockerfile -t $(DOCKER_IMAGE) .
 
 run:
 	$(call run_docker) 
