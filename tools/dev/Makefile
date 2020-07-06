@@ -35,7 +35,7 @@ define run_docker
 	--name $(CONTAINER_NAME) \
 	--network host \
 	$(DOCKER_IMAGE) \
-	/bin/bash
+	./lotus daemon
 endef
 
 define kill_docker
@@ -43,7 +43,7 @@ define kill_docker
 endef
 
 
-all: build
+all: build_dev_docker
 
 build_dev_docker:
 	docker build --rm  -f dockerfile --build-arg WORKPATH=$REPOPATH -t $(DOCKER_IMAGE) .
