@@ -5,7 +5,17 @@ jobs:
       - image: circleci/buildpack-deps:latest
     steps:
       - checkout
-      - run: make
+      - setup_remote_docker: 
+          docker_layer_caching: false
+      - run:
+          name: Set up docker prefix
+          command: |
+              if [[ $CIRCLE_SHELL_ENV == *"localbuild"* ]]; then
+                  echo "export OPTIONAL_SUDO='sudo '" >> $BASH_ENV
+              else
+                  echo "export OPTIONAL_SUDO=''" >> $BASH_ENV
+              fi
+      - run: ${OPTIONAL_SUDO} make
 
 workflows:
   version: 2
