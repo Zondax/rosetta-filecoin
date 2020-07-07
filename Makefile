@@ -46,11 +46,10 @@ define login_docker
 	docker exec -ti $(CONTAINER_NAME) /bin/bash
 endef
 
-all: build
+all: build_docker
 
 build_docker:
-	docker build \
-    -f dockerfile -t $(DOCKER_IMAGE) .
+	docker build -t $(DOCKER_IMAGE) .
 
 run:
 	$(call run_docker) 

@@ -6,7 +6,9 @@ ARG NODEPATH=/lotus
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
+RUN apt-get update && \
+    apt-get install -yy apt-utils && \
+    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
 
 RUN git clone --single-branch --branch $BRANCH https://github.com/Zondax/lotus.git ${NODEPATH}
 RUN cd ${NODEPATH} && make rosetta-api && make install
@@ -18,7 +20,9 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 ARG ROSETTA_PORT=8080
 
-RUN apt update && apt install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
+RUN apt-get update && \
+    apt-get install -yy apt-utils  && \
+    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
 
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 

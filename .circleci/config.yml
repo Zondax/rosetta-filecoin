@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/buildpack-deps:latest
+    steps:
+      - checkout
+      - run: make
+
+workflows:
+  version: 2
+
+  default:
+    jobs:
+      - build
