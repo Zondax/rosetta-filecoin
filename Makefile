@@ -54,7 +54,7 @@ build_docker:
 run:
 	$(call run_docker) 
 
-login_docker:
+login:
 	$(call login_docker) 
 
 stop:
