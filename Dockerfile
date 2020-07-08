@@ -33,16 +33,17 @@ ENV LOTUS_STORAGE_PATH=/data/storage/
 
 EXPOSE $ROSETTA_PORT
 
-RUN printf "#!/bin/bash \
-\n# Run lotus daemon \
-\n lotus daemon & \
-\n sleep 30 \
-\n peers='lotus net peers | wc -l' \
-\n while [[ eval $peers -eq 0 ]] \
-\n do \
-\n sleep 5 \
-\n done \
-\n lotus sync wait\n" > /start.sh
+RUN echo ' \n\
+'#!/bin/bash' \n\
+lotus daemon& \n\
+sleep 30 \n\
+peers="lotus net peers | wc -l" \n\
+while [ $(eval $peers) -eq 0 ] \n\
+do \n\
+echo "Waiting for peers..." \n\
+sleep 5 \n\
+done \n\
+lotus sync wait ' >> /start.sh
 
 RUN chmod +x /start.sh
 
