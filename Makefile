@@ -46,16 +46,25 @@ define login_docker
 	docker exec -ti $(CONTAINER_NAME) /bin/bash
 endef
 
-all: build_docker
+all: run
+.PHONY: all
 
-build_docker:
+build:
 	docker build -t $(DOCKER_IMAGE) .
+.PHONY: build
 
-run:
-	$(call run_docker) 
+rebuild:
+	docker build --no-cache -t $(DOCKER_IMAGE) .
+.PHONY: rebuild
+
+run: build
+	$(call run_docker)
+.PHONY: run
 
 login:
-	$(call login_docker) 
+	$(call login_docker)
+.PHONY: login
 
 stop:
 	$(call kill_docker)
+.PHONY: stop
