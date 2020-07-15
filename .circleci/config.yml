@@ -15,7 +15,7 @@ jobs:
               else
                   echo "export OPTIONAL_SUDO=''" >> $BASH_ENV
               fi
-      - run: ${OPTIONAL_SUDO} make
+      - run: ${OPTIONAL_SUDO} make build
 
 workflows:
   version: 2
