@@ -1,7 +1,8 @@
 # Create builder container
 FROM golang:1.14 as builder
 
-ARG BRANCH=rosetta_integration
+ARG BRANCH=master
+ARG REPO=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -10,8 +11,8 @@ RUN apt-get update && \
     apt-get install -yy apt-utils && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
 
-RUN git clone --single-branch --branch $BRANCH https://github.com/Zondax/lotus.git ${NODEPATH}
-RUN cd ${NODEPATH} && make rosetta-api && make install
+RUN git clone --single-branch --branch ${BRANCH} ${REPO} ${NODEPATH}
+RUN cd ${NODEPATH} && make build && make install
 
 
 # Create final container
