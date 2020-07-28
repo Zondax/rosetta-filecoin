@@ -34,7 +34,9 @@ define run_docker
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
 	-v $(shell pwd)/data:/data \
 	--name $(CONTAINER_NAME) \
+	-p 1234:1234 \
 	-p $(ROSETTA_PORT):8080 \
+        --dns 8.8.8.8 \
 	$(DOCKER_IMAGE)
 endef
 

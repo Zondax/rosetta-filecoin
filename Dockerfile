@@ -14,7 +14,6 @@ RUN apt-get update && \
 RUN git clone --single-branch --branch ${BRANCH} ${REPO} ${NODEPATH}
 RUN cd ${NODEPATH} && make build && make install
 
-
 # Create final container
 FROM ubuntu:20.04
 
@@ -32,6 +31,7 @@ RUN mkdir -p /data/{node,storage}
 ENV LOTUS_PATH=/data/node/
 ENV LOTUS_STORAGE_PATH=/data/storage/
 
+EXPOSE 1234
 EXPOSE $ROSETTA_PORT
 
 RUN echo ' \n\
