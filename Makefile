@@ -33,10 +33,11 @@ endif
 
 define run_docker
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
+	--dns 8.8.8.8 \
 	-v $(shell pwd)/data:/data \
 	--name $(CONTAINER_NAME) \
 	-p $(ROSETTA_PORT):$(ROSETTA_PORT) \
-	--dns 8.8.8.8 \
+	-p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
 	$(DOCKER_IMAGE)
 endef
 
