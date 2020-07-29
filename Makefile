@@ -36,7 +36,6 @@ define run_docker
 	-v $(shell pwd)/data:/data \
 	--name $(CONTAINER_NAME) \
 	-p $(ROSETTA_PORT):$(ROSETTA_PORT) \
-	-p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
 	--dns 8.8.8.8 \
 	$(DOCKER_IMAGE)
 endef
