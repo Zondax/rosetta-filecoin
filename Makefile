@@ -21,6 +21,7 @@ CONTAINER_NAME=lotusnode
 
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
 ROSETTA_PORT=8080
+LOTUS_API_PORT = 1234
 
 ifdef INTERACTIVE
 INTERACTIVE_SETTING:="-i"
@@ -34,9 +35,9 @@ define run_docker
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
 	-v $(shell pwd)/data:/data \
 	--name $(CONTAINER_NAME) \
-	-p 1234:1234 \
-	-p $(ROSETTA_PORT):8080 \
-        --dns 8.8.8.8 \
+	-p $(ROSETTA_PORT):$(ROSETTA_PORT) \
+	-p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
+	--dns 8.8.8.8 \
 	$(DOCKER_IMAGE)
 endef
 
