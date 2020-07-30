@@ -14,9 +14,7 @@
 #*  limitations under the License.
 #********************************************************************************
 
-.PHONY: all build_docker login_docker run stop 
-
-DOCKER_IMAGE=lotus:latest
+DOCKER_IMAGE=zondax/rosetta-filecoin:latest
 CONTAINER_NAME=lotusnode
 
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
@@ -59,6 +57,10 @@ build:
 rebuild:
 	docker build --no-cache -t $(DOCKER_IMAGE) .
 .PHONY: rebuild
+
+clean:
+	docker rmi $(DOCKER_IMAGE) .
+.PHONY: clean
 
 run: build
 	$(call run_docker)
