@@ -61,6 +61,8 @@ do \n\
 echo "${GRN}### Waiting for peers...${OFF}\n" \n\
 sleep 5 \n\
 done \n\
+LOTUS_CHAIN_INDEX_CACHE=32768 \n\
+LOTUS_CHAIN_TIPSET_CACHE=8192 \n\
 LOTUS_RPC_TOKEN=$( cat /data/node/token ) \n\
 echo "${GRN}### Launching rosetta-filecoin-proxy${OFF}\n" \n\
 rosetta-filecoin-proxy  ' >> /start.sh
