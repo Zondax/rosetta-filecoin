@@ -15,10 +15,10 @@ RUN apt-get update && \
     apt-get install -yy apt-utils && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
 
-RUN git clone --single-branch --branch ${BRANCH_FIL} ${REPO_FIL} ${NODEPATH}
+RUN git clone --single-branch --recurse-submodules --branch ${BRANCH_FIL} ${REPO_FIL} ${NODEPATH}
 RUN cd ${NODEPATH} && make build && make install
 
-RUN git clone --single-branch --branch ${BRANCH_PROXY} ${REPO_PROXY} ${PROXYPATH}
+RUN git clone --single-branch --recurse-submodules --branch ${BRANCH_PROXY} ${REPO_PROXY} ${PROXYPATH}
 RUN cd ${PROXYPATH} && make build
 
 # Create final container
