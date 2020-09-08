@@ -48,26 +48,8 @@ ENV LOTUS_RPC_TOKEN=""
 EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
 
-RUN echo ' \n\
-'#!/bin/bash' \n\
-GRN=$"\e[32;1m" \n\
-OFF=$"\e[0m" \n\
-lotus daemon& \n\
-sleep 30 \n\
-lotus log set-level ERROR \n\
-peers="lotus net peers | wc -l" \n\
-while [ $(eval $peers) -eq 0 ] \n\
-do \n\
-echo "${GRN}### Waiting for peers...${OFF}\n" \n\
-sleep 5 \n\
-done \n\
-LOTUS_CHAIN_INDEX_CACHE=32768 \n\
-LOTUS_CHAIN_TIPSET_CACHE=8192 \n\
-LOTUS_RPC_TOKEN=$( cat /data/node/token ) \n\
-echo "${GRN}### Launching rosetta-filecoin-proxy${OFF}\n" \n\
-rosetta-filecoin-proxy  ' >> /start.sh
+#Copy entrypoint script
+COPY --from=builder ${PROXYPATH}/start.sh /
 
-RUN chmod +x /start.sh
-
-CMD /start.sh && bash
+CMD /start.sh
 
