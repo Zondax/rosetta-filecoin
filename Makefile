@@ -29,14 +29,19 @@ INTERACTIVE_SETTING:=
 TTY_SETTING:=
 endif
 
+MAX_RAM:=$(shell grep MemTotal /proc/meminfo | awk '{print $$2}')
+
 define run_docker
-	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
-	--dns 8.8.8.8 \
-	-v $(shell pwd)/data:/data \
-	--name $(CONTAINER_NAME) \
-	-p $(ROSETTA_PORT):$(ROSETTA_PORT) \
-	-p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
-	$(DOCKER_IMAGE)
+    docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
+    --dns 8.8.8.8 \
+    -m $(MAX_RAM) \
+    --oom-kill-disable \
+    --ulimit nofile=9000:9000 \
+    -v $(shell pwd)/data:/data \
+    --name $(CONTAINER_NAME) \
+    -p $(ROSETTA_PORT):$(ROSETTA_PORT) \
+    -p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
+    $(DOCKER_IMAGE)
 endef
 
 define kill_docker
