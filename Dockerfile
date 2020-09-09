@@ -51,5 +51,6 @@ EXPOSE $LOTUS_API_PORT
 #Copy entrypoint script
 COPY --from=builder ${PROXYPATH}/start.sh /
 
-CMD /start.sh
+ENTRYPOINT ["/start.sh"]
+CMD ["",""]
 
