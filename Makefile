@@ -29,14 +29,27 @@ INTERACTIVE_SETTING:=
 TTY_SETTING:=
 endif
 
+ifeq (run,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+
+MAX_RAM:=$(shell grep MemTotal /proc/meminfo | awk '{print $$2}')
+
 define run_docker
-	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
-	--dns 8.8.8.8 \
-	-v $(shell pwd)/data:/data \
-	--name $(CONTAINER_NAME) \
-	-p $(ROSETTA_PORT):$(ROSETTA_PORT) \
-	-p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
-	$(DOCKER_IMAGE)
+    docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
+    --dns 8.8.8.8 \
+    -m $(MAX_RAM) \
+    --oom-kill-disable \
+    --ulimit nofile=9000:9000 \
+    -v $(shell pwd)/data:/data \
+    --name $(CONTAINER_NAME) \
+    -p $(ROSETTA_PORT):$(ROSETTA_PORT) \
+    -p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
+    $(DOCKER_IMAGE) $(RUN_ARGS)
 endef
 
 define kill_docker

@@ -15,10 +15,10 @@ RUN apt-get update && \
     apt-get install -yy apt-utils && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
 
-RUN git clone --single-branch --branch ${BRANCH_FIL} ${REPO_FIL} ${NODEPATH}
+RUN git clone --single-branch --recurse-submodules --branch ${BRANCH_FIL} ${REPO_FIL} ${NODEPATH}
 RUN cd ${NODEPATH} && make build && make install
 
-RUN git clone --single-branch --branch ${BRANCH_PROXY} ${REPO_PROXY} ${PROXYPATH}
+RUN git clone --single-branch --recurse-submodules --branch ${BRANCH_PROXY} ${REPO_PROXY} ${PROXYPATH}
 RUN cd ${PROXYPATH} && make build
 
 # Create final container
@@ -48,26 +48,9 @@ ENV LOTUS_RPC_TOKEN=""
 EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
 
-RUN echo ' \n\
-'#!/bin/bash' \n\
-GRN=$"\e[32;1m" \n\
-OFF=$"\e[0m" \n\
-lotus daemon& \n\
-sleep 30 \n\
-lotus log set-level ERROR \n\
-peers="lotus net peers | wc -l" \n\
-while [ $(eval $peers) -eq 0 ] \n\
-do \n\
-echo "${GRN}### Waiting for peers...${OFF}\n" \n\
-sleep 5 \n\
-done \n\
-LOTUS_CHAIN_INDEX_CACHE=32768 \n\
-LOTUS_CHAIN_TIPSET_CACHE=8192 \n\
-LOTUS_RPC_TOKEN=$( cat /data/node/token ) \n\
-echo "${GRN}### Launching rosetta-filecoin-proxy${OFF}\n" \n\
-rosetta-filecoin-proxy  ' >> /start.sh
+#Copy entrypoint script
+COPY --from=builder ${PROXYPATH}/start.sh /
 
-RUN chmod +x /start.sh
-
-CMD /start.sh && bash
+ENTRYPOINT ["/start.sh"]
+CMD ["",""]
 
