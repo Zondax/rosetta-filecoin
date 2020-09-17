@@ -37,7 +37,7 @@ ifeq (run,$(firstword $(MAKECMDGOALS)))
 endif
 
 
-MAX_RAM:=$(shell grep MemTotal /proc/meminfo | awk '{print $$2}')
+MAX_RAM:=$(shell grep MemTotal /proc/meminfo | awk '{print $$2 $$3}')
 
 define run_docker
     docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
