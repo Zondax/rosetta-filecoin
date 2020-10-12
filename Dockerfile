@@ -64,7 +64,7 @@ RUN git clone --recurse-submodules ${REPO_PROXY} ${PROXYPATH}
 
 RUN if [ ! -z "${BRANCH_PROXY}" ]; then \
         echo "Checking out to proxy branch: ${BRANCH_PROXY}"; \
-  		git checkout ${BRANCH_FIL}; \
+  		git checkout ${BRANCH_PROXY}; \
     fi
 
 RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
