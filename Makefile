@@ -15,7 +15,11 @@
 #********************************************************************************
 
 DOCKER_IMAGE=zondax/rosetta-filecoin:latest
+DOCKER_DEVNET_IMAGE=zondax/filecoin-devnet:latest
+DOCKERFILE_DEVNET=./tools/devnet.dockerfile
+
 CONTAINER_NAME=lotusnode
+CONTAINER_DEVNET_NAME=filecoin-devnet
 
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
 ROSETTA_PORT=8080
@@ -67,9 +71,17 @@ build:
 	docker build -t $(DOCKER_IMAGE) .
 .PHONY: build
 
+build_devnet:
+	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
+.PHONY: build_devnet
+
 rebuild:
 	docker build --no-cache -t $(DOCKER_IMAGE) .
 .PHONY: rebuild
+
+rebuild_devnet:
+	docker build --no-cache -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
+.PHONY: rebuild_devnet
 
 clean:
 	docker rmi $(DOCKER_IMAGE) .
