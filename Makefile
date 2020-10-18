@@ -72,7 +72,7 @@ rebuild:
 .PHONY: rebuild
 
 clean:
-	docker rmi $(DOCKER_IMAGE) .
+	docker rmi $(DOCKER_IMAGE)
 .PHONY: clean
 
 run: build
