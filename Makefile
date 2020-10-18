@@ -64,11 +64,11 @@ all: run
 .PHONY: all
 
 build:
-	docker build -t $(DOCKER_IMAGE) .
+	docker build -t $(DOCKER_IMAGE)
 .PHONY: build
 
 rebuild:
-	docker build --no-cache -t $(DOCKER_IMAGE) .
+	docker build --no-cache -t $(DOCKER_IMAGE)
 .PHONY: rebuild
 
 clean:
