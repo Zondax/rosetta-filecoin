@@ -42,20 +42,32 @@ RUN apt-get update && \
 
 RUN make 2k && make install
 
+# Create final container
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+ARG LOTUS_API_PORT=1234
+EXPOSE $LOTUS_API_PORT
+
+# Install Lotus deps
+RUN apt-get update && \
+    apt-get install -yy apt-utils  && \
+    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
+
+# Install Lotus
+COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
+COPY --from=builder ${NODEPATH}/lotus/lotus-seed /usr/local/bin/
+
 RUN export LOTUS_SKIP_GENESIS_CHECK=_yes_
 
 RUN lotus fetch-params 2048 && lotus-seed pre-seal --sector-size 2KiB --num-sectors 2
 
 RUN lotus-seed genesis new localnet.json && \
-    lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json && \
-    lotus daemon --lotus-make-genesis=devgen.car --genesis-template=localnet.json --bootstrap=false&
+   lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
 
-RUN lotus wallet import --as-default ~/.genesis-sectors/pre-seal-t01000.key && \
-    lotus-miner init --genesis-miner --actor=t01000 --sector-size=2KiB --pre-sealed-sectors=~/.genesis-sectors --pre-sealed-metadata=~/.genesis-sectors/pre-seal-t01000.json --nosync && \
-    lotus-miner run --nosync
+COPY ./tools/start_devnet.sh /start_devnet.sh
 
-
-
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/start_devnet.sh"]
 CMD ["",""]
 
