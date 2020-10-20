@@ -46,9 +46,7 @@ RUN make 2k && make install
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-
 ARG LOTUS_API_PORT=1234
-EXPOSE $LOTUS_API_PORT
 
 # Install Lotus deps
 RUN apt-get update && \
@@ -59,12 +57,18 @@ RUN apt-get update && \
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 COPY --from=builder ${NODEPATH}/lotus/lotus-seed /usr/local/bin/
 
+EXPOSE $LOTUS_API_PORT
 RUN export LOTUS_SKIP_GENESIS_CHECK=_yes_
 
 RUN lotus fetch-params 2048 && lotus-seed pre-seal --sector-size 2KiB --num-sectors 2
 
 RUN lotus-seed genesis new localnet.json && \
    lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
+
+# Copy config files
+COPY ./tools/devnet_config.toml /devnet_config.toml
+COPY ./tools/test_actor_1.key /test_actor_1.key
+COPY ./tools/test_actor_2.key /test_actor_2.key
 
 COPY ./tools/start_devnet.sh /start_devnet.sh
 
