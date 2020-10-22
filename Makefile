@@ -15,7 +15,11 @@
 #********************************************************************************
 
 DOCKER_IMAGE=zondax/rosetta-filecoin:latest
+DOCKER_DEVNET_IMAGE=zondax/filecoin-devnet:latest
+DOCKERFILE_DEVNET=./tools/devnet.dockerfile
+
 CONTAINER_NAME=lotusnode
+CONTAINER_DEVNET_NAME=filecoin-devnet
 
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
 ROSETTA_PORT=8080
@@ -52,12 +56,23 @@ define run_docker
     $(DOCKER_IMAGE) $(RUN_ARGS)
 endef
 
+define run_devnet
+    docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
+    --dns 8.8.8.8 \
+    -m $(MAX_RAM) \
+    --oom-kill-disable \
+    --ulimit nofile=9000:9000 \
+    --name $(CONTAINER_DEVNET_NAME) \
+    -p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
+    $(DOCKER_DEVNET_IMAGE) $(RUN_ARGS)
+endef
+
 define kill_docker
-	docker kill $(CONTAINER_NAME)
+	docker kill $(1)
 endef
 
 define login_docker
-	docker exec -ti $(CONTAINER_NAME) /bin/bash
+	docker exec -ti $(1) /bin/bash
 endef
 
 all: run
@@ -67,9 +82,17 @@ build:
 	docker build -t $(DOCKER_IMAGE) .
 .PHONY: build
 
+build_devnet:
+	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
+.PHONY: build_devnet
+
 rebuild:
 	docker build --no-cache -t $(DOCKER_IMAGE) .
 .PHONY: rebuild
+
+rebuild_devnet:
+	docker build --no-cache -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
+.PHONY: rebuild_devnet
 
 clean:
 	docker rmi $(DOCKER_IMAGE)
@@ -79,10 +102,22 @@ run: build
 	$(call run_docker)
 .PHONY: run
 
+run_devnet: build_devnet
+	$(call run_devnet)
+.PHONY: run_devnet
+
 login:
-	$(call login_docker)
+	$(call login_docker,${CONTAINER_NAME})
 .PHONY: login
 
+login_devnet:
+	$(call login_docker,${CONTAINER_DEVNET_NAME})
+.PHONY: login_devnet
+
 stop:
-	$(call kill_docker)
+	$(call kill_docker,${CONTAINER_NAME})
 .PHONY: stop
+
+stop_devnet:
+	$(call kill_docker,${CONTAINER_DEVNET_NAME})
+.PHONY: stop_devnet
