@@ -95,7 +95,7 @@ rebuild_devnet:
 .PHONY: rebuild_devnet
 
 clean:
-	docker rmi $(DOCKER_IMAGE) .
+	docker rmi $(DOCKER_IMAGE)
 .PHONY: clean
 
 run: build
