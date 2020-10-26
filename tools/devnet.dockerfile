@@ -67,9 +67,13 @@ RUN lotus-seed genesis new localnet.json && \
 
 # Copy config files
 COPY ./tools/devnet_config.toml /devnet_config.toml
+
+# Copy test actors keys
 COPY ./tools/test_actor_1.key /test_actor_1.key
 COPY ./tools/test_actor_2.key /test_actor_2.key
+COPY ./tools/test_actor_3.key /test_actor_3.key
 
+# Copy startup script
 COPY ./tools/start_devnet.sh /start_devnet.sh
 
 ENTRYPOINT ["/start_devnet.sh"]
