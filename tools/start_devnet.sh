@@ -9,6 +9,7 @@ sleep 5
 # Import test actors
 lotus wallet import /test_actor_1.key # t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba
 lotus wallet import /test_actor_2.key # t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa
+lotus wallet import /test_actor_3.key # f1itpqzzcx6yf52oc35dgsoxfqkoxpy6kdmygbaja
 
 # Create and init miner
 echo -e "${GREEN}Creating miner...${NC}"
@@ -22,11 +23,12 @@ sleep 20
 echo -e "${GREEN}Funding accounts...${NC}"
 lotus send t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba 1000
 lotus send t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa 1000
+lotus send f1itpqzzcx6yf52oc35dgsoxfqkoxpy6kdmygbaja 1000
 
-# Create test msig actor and send some tokens
+# Create test msig actor and send some tokens to it
 echo -e "${GREEN}Creating multisig actor...${NC}"
-lotus msig create --required 1 t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa # t01003
-lotus send t01003 5000
+lotus msig create --required 1 t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa # t01004
+lotus send t01004 5000
 
 # Run forever until exit
 while :
