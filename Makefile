@@ -48,7 +48,7 @@ define run_docker
     --dns 8.8.8.8 \
     -m $(MAX_RAM) \
     --oom-kill-disable \
-    --ulimit nofile=9000:9000 \
+    --ulimit nofile=900000 \
     -v $(shell pwd)/data:/data \
     --name $(CONTAINER_NAME) \
     -p $(ROSETTA_PORT):$(ROSETTA_PORT) \
@@ -60,10 +60,11 @@ define run_devnet
     docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
     --dns 8.8.8.8 \
     -m $(MAX_RAM) \
+    --cpus="16" \
     --oom-kill-disable \
-    --ulimit nofile=9000:9000 \
+    --ulimit nofile=90000:90000 \
     --name $(CONTAINER_DEVNET_NAME) \
-    -p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
+    -p 1235:$(LOTUS_API_PORT) \
     $(DOCKER_DEVNET_IMAGE) $(RUN_ARGS)
 endef
 

@@ -1,8 +1,8 @@
 # Create builder container
-FROM golang:1.14 as builder
+FROM golang:1.15 as builder
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL=master
+ARG BRANCH_FIL=v1.4.0
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
@@ -38,7 +38,7 @@ RUN if [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils && \
-    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
+    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
 
 RUN make 2k && make install
 
@@ -51,7 +51,10 @@ ARG LOTUS_API_PORT=1234
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils  && \
-    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev
+    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1
+
+RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/h/hwloc/libhwloc5_1.11.9-1_amd64.deb && \
+    dpkg -i libhwloc5_1.11.9-1_amd64.deb
 
 # Install Lotus
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
