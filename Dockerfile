@@ -2,7 +2,7 @@
 FROM golang:1.15 as builder
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL=v1.5.0
+ARG BRANCH_FIL=v1.5.3
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
@@ -15,6 +15,11 @@ ARG PROXYPATH=/rosetta-proxy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install Lotus deps
+RUN apt-get update && \
+    apt-get install -yy apt-utils && \
+    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+
 # Clone Lotus
 RUN if [ -z "${BRANCH_FIL}" ] && [ -z "${COMMIT_HASH_FIL}" ]; then \
   		echo 'Error: Both BRANCH_FIL and COMMIT_HASH_FIL are empty'; \
@@ -25,7 +30,6 @@ RUN if [ ! -z "${BRANCH_FIL}" ] && [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 		echo 'Error: Both BRANCH_FIL and COMMIT_HASH_FIL are set'; \
 		exit 1; \
 	fi
-
 
 WORKDIR ${NODEPATH}
 RUN git clone ${REPO_FIL} ${NODEPATH}
@@ -40,10 +44,11 @@ RUN if [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 		git checkout ${COMMIT_HASH_FIL}; \
 	fi
 
-# Install Lotus deps
-RUN apt-get update && \
-    apt-get install -yy apt-utils && \
-    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+ENV RUSTFLAGS="-C target-cpu=native -g"
+ENV FFI_BUILD_FROM_SOURCE=1
 
 RUN make build && make install
 
