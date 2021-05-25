@@ -24,6 +24,7 @@ echo -e "${GREEN}Funding accounts...${NC}"
 lotus send t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba 1000
 lotus send t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa 1000
 lotus send f1itpqzzcx6yf52oc35dgsoxfqkoxpy6kdmygbaja 1000
+lotus send t137sjdbgunloi7couiy4l5nc7pd6k2jmq32vizpy 1000
 
 # Create test msig actor and send some tokens to it
 echo -e "${GREEN}Creating multisig actor...${NC}"
