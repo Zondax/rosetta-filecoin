@@ -3,6 +3,8 @@
 GREEN='\e[42m'
 NC='\033[0m'
 
+mkdir -p /root/.lotus && cp -fr /configFiles/* /root/.lotus
+
 lotus daemon --config /devnet_config.toml --lotus-make-genesis=devgen.car --genesis-template=localnet.json --bootstrap=false&
 sleep 5
 

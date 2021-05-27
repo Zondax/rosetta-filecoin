@@ -70,6 +70,11 @@ RUN lotus-seed genesis new localnet.json && \
 
 # Copy config files
 COPY ./tools/devnet_config.toml /devnet_config.toml
+COPY ./tools/dev_node/api /configFiles/api
+
+# Copy keys files
+COPY ./tools/dev_node/token /configFiles/token
+COPY ./tools/dev_node/keystore /configFiles/keystore
 
 # Copy test actors keys
 COPY ./tools/test_actor_1.key /test_actor_1.key
