@@ -99,6 +99,9 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/h/hwloc/libhwloc5_1.11.9
 # Install Lotus
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 
+# Copy config files
+COPY ./tools/mainnet_config.toml /etc/lotus_config/mainnet.toml
+
 RUN mkdir -p /data/{node,storage}
 ENV LOTUS_PATH=/data/node/
 ENV LOTUS_STORAGE_PATH=/data/storage/
@@ -114,6 +117,6 @@ EXPOSE $LOTUS_API_PORT
 #Copy entrypoint script
 COPY --from=builder ${PROXYPATH}/start.sh /
 
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/start.sh", "--config", "/etc/lotus_config/mainnet.toml"]
 CMD ["",""]
 
