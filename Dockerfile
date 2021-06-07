@@ -18,6 +18,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils && \
+    apt-get install -yy curl && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
 
 # Clone Lotus
