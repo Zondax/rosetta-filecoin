@@ -18,7 +18,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils && \
-    apt-get install -yy curl && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
 
 # Clone Lotus
@@ -92,6 +91,7 @@ ARG PROXYPATH=/rosetta-proxy
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils  && \
+    apt-get install -yy curl && \
     apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1
 
 RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/h/hwloc/libhwloc5_1.11.9-1_amd64.deb && \
