@@ -83,6 +83,10 @@ build:
 	docker build -t $(DOCKER_IMAGE) .
 .PHONY: build
 
+build_nosync:
+	docker build -t $(DOCKER_IMAGE) --build-arg DISABLE_SYNC=1 .
+.PHONY: build
+
 build_devnet:
 	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
 .PHONY: build_devnet

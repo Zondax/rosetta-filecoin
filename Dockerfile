@@ -49,6 +49,14 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 ENV RUSTFLAGS="-C target-cpu=native -g"
 ENV FFI_BUILD_FROM_SOURCE=1
+ARG DISABLE_SYNC
+
+# This will disable sync by setting the number of sync workers to 0
+RUN if [ ! -z $DISABLE_SYNC ]; then \
+		echo "\n\n\nWARNING : Patching + disabling synchronization\n\n\n"; \
+		sed -i -E 's/^[ \t]*MaxSyncWorkers[ \t]*=[ \t]*[0-9]*$/MaxSyncWorkers=0/g' chain/sync_manager.go; \
+		head -n 25 chain/sync_manager.go; \
+	fi
 
 RUN make build && make install
 
@@ -78,6 +86,13 @@ RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
 	fi
 
 RUN make build
+
+
+
+
+###################################################
+
+
 
 
 # Create final container
