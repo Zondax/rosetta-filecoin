@@ -24,6 +24,15 @@ CONTAINER_DEVNET_NAME=filecoin-devnet
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
 ROSETTA_PORT=8080
 LOTUS_API_PORT = 1234
+NPROC=16
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	NPROC=$(shell nproc)
+endif
+ifeq ($(UNAME_S),Darwin)
+	NPROC=$(shell sysctl -n hw.physicalcpu)
+endif
 
 ifdef INTERACTIVE
 INTERACTIVE_SETTING:="-i"
@@ -42,6 +51,9 @@ endif
 
 
 MAX_RAM:=$(shell grep MemTotal /proc/meminfo | awk '{print $$2 $$3}')
+ifneq ($(MAX_RAM),)
+	RAM_OPT="-m $(MAX_RAM) --oom-kill-disable"
+endif
 
 define run_docker
     docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
@@ -59,9 +71,8 @@ endef
 define run_devnet
     docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
     --dns 8.8.8.8 \
-    -m $(MAX_RAM) \
-    --cpus="16" \
-    --oom-kill-disable \
+    $(RAM_OPT) \
+    --cpus="$(NPROC)" \
     --ulimit nofile=90000:90000 \
     --name $(CONTAINER_DEVNET_NAME) \
     -p 1235:$(LOTUS_API_PORT) \
