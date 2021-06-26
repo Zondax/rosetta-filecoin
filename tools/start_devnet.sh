@@ -31,8 +31,8 @@ lotus send t137sjdbgunloi7couiy4l5nc7pd6k2jmq32vizpy 1000
 
 # Create test msig actor and send some tokens to it
 echo -e "${GREEN}Creating multisig actor...${NC}"
-lotus msig create --required 1 t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa # t01004
-lotus send t01004 5000
+lotus msig create --required 1 t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa # t01005
+lotus send t01005 5000
 
 # Run forever until exit
 while :
