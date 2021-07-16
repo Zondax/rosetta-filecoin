@@ -1,5 +1,5 @@
 # Create builder container
-FROM golang:1.15 as builder
+FROM golang:1.16 as builder
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
 ARG BRANCH_FIL=v1.10.0
@@ -10,7 +10,7 @@ ARG NODEPATH=/lotus
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
 ARG BRANCH_PROXY=master
 ARG COMMIT_HASH_PROXY=""
-ARG REPO_PROXY=https://github.com/Zondax/rosetta-filecoin-proxy.git
+ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -61,7 +61,7 @@ RUN if [ ! -z $DISABLE_SYNC ]; then \
 RUN make build && make install
 
 
-# Clone rosetta-proxy
+# Clone filecoin-indexing-rosetta-proxy
 RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
   		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are empty'; \
   		exit 1; \
@@ -124,7 +124,7 @@ ENV LOTUS_STORAGE_PATH=/data/storage/
 
 #Install rosetta proxy
 COPY --from=builder ${PROXYPATH}/rosetta-filecoin-proxy /usr/local/bin
-ENV LOTUS_RPC_URL=ws://127.0.0.1:1234/rpc/v0
+ENV LOTUS_RPC_URL=http://proxy.filecoin.rosetta.pre.zondax.net/
 ENV LOTUS_RPC_TOKEN=""
 
 EXPOSE $ROSETTA_PORT
