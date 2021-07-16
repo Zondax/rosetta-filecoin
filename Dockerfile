@@ -8,7 +8,7 @@ ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
-ARG BRANCH_PROXY=master
+ARG BRANCH_PROXY=main
 ARG COMMIT_HASH_PROXY=""
 ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
@@ -123,7 +123,7 @@ ENV LOTUS_PATH=/data/node/
 ENV LOTUS_STORAGE_PATH=/data/storage/
 
 #Install rosetta proxy
-COPY --from=builder ${PROXYPATH}/rosetta-filecoin-proxy /usr/local/bin
+COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
 ENV LOTUS_RPC_URL=http://proxy.filecoin.rosetta.pre.zondax.net/
 ENV LOTUS_RPC_TOKEN=""
 
