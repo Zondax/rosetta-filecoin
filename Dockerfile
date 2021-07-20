@@ -126,7 +126,7 @@ ENV LOTUS_STORAGE_PATH=/data/storage/
 COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
 
 # Copy config files
-COPY --from=builder ${PROXYPATH}/config.yaml /usr/local/bin
+COPY --from=builder ${PROXYPATH}/config.yaml /
 
 ENV LOTUS_RPC_URL=ws://127.0.0.1:1234/rpc/v0
 ENV LOTUS_RPC_TOKEN=""
