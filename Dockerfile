@@ -124,7 +124,11 @@ ENV LOTUS_STORAGE_PATH=/data/storage/
 
 #Install rosetta proxy
 COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
-ENV LOTUS_RPC_URL=http://proxy.filecoin.rosetta.pre.zondax.net/
+
+# Copy config files
+COPY --from=builder ${PROXYPATH}/config.yaml /
+
+ENV LOTUS_RPC_URL=ws://127.0.0.1:1234/rpc/v0
 ENV LOTUS_RPC_TOKEN=""
 
 EXPOSE $ROSETTA_PORT
