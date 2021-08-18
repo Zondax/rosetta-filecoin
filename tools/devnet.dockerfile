@@ -1,8 +1,8 @@
 # Create builder container
-FROM golang:1.15 as builder
+FROM golang:1.16 as builder
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL=v1.10.0
+ARG BRANCH_FIL=v1.11.1
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
