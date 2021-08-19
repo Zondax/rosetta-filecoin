@@ -107,13 +107,12 @@ ARG PROXYPATH=/rosetta-proxy
 RUN apt-get update && \
     apt-get install -yy apt-utils  && \
     apt-get install -yy curl && \
-    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1
-
-RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/h/hwloc/libhwloc5_1.11.9-1_amd64.deb && \
-    dpkg -i libhwloc5_1.11.9-1_amd64.deb
+    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1 hwloc libhwloc-dev
 
 # Install Lotus
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
+#Check Lotus installation
+RUN lotus --version
 
 # Copy config files
 COPY ./tools/mainnet_config.toml /etc/lotus_config/mainnet.toml
