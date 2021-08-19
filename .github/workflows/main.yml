@@ -1,0 +1,28 @@
+name: Build jobs
+
+on:
+  pull_request
+
+jobs:
+  build_node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus node
+        run: |
+          make build
+
+  build_devnet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus devnet
+        run: |
+          make build_devnet
+
