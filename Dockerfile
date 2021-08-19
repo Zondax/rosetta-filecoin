@@ -111,6 +111,8 @@ RUN apt-get update && \
 
 # Install Lotus
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
+#Check Lotus installation
+RUN lotus --version
 
 # Copy config files
 COPY ./tools/mainnet_config.toml /etc/lotus_config/mainnet.toml
