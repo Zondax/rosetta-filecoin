@@ -46,5 +46,5 @@ done
 
 LOTUS_RPC_TOKEN=$( cat /root/.lotus/token )
 
-echo -e "${GREEN}### Launching rosetta-filecoin-proxy${NC}"
-rosetta-filecoin-proxy 2>&1
+echo -e "${GREEN}### Launching filecoin-indexing-rosetta-proxy${NC}"
+filecoin-indexing-rosetta-proxy 2>&1
