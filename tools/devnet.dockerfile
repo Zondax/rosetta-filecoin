@@ -110,6 +110,7 @@ RUN lotus-seed genesis new localnet.json && \
 
 # Copy config files
 COPY ./tools/devnet_config.toml /devnet_config.toml
+COPY ./tools/devnet_rosetta_config.yaml /config.yaml
 COPY ./tools/dev_node/api /configFiles/api
 
 # Copy keys files
