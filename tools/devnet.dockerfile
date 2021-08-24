@@ -93,7 +93,7 @@ COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 COPY --from=builder ${NODEPATH}/lotus/lotus-seed /usr/local/bin/
 
 #Install rosetta proxy
-COPY --from=builder ${PROXYPATH}/rosetta-filecoin-proxy /usr/local/bin
+COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
 
 ENV LOTUS_RPC_URL=ws://127.0.0.1:1234/rpc/v0
 ENV LOTUS_RPC_TOKEN=""
