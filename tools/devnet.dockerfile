@@ -10,7 +10,7 @@ ARG NODEPATH=/lotus
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
 ARG BRANCH_PROXY=master
 ARG COMMIT_HASH_PROXY=""
-ARG REPO_PROXY=https://github.com/Zondax/rosetta-filecoin-proxy.git
+ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
 
 ENV DEBIAN_FRONTEND=noninteractive
