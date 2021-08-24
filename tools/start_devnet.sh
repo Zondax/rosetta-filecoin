@@ -34,8 +34,17 @@ echo -e "${GREEN}Creating multisig actor...${NC}"
 lotus msig create --required 1 t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa # t01005
 lotus send t01005 5000
 
-# Run forever until exit
-while :
+
+LOTUS_CHAIN_INDEX_CACHE=32768
+LOTUS_CHAIN_TIPSET_CACHE=8192
+
+until [ -f /root/.lotus/token ]
 do
-	sleep 1
+     echo -e "${GREEN}Waiting for token file to be created by lotus... ${NC}$"
+     sleep 5
 done
+
+LOTUS_RPC_TOKEN=$( cat /root/.lotus/token )
+
+echo -e "${GREEN}### Launching rosetta-filecoin-proxy${NC}"
+rosetta-filecoin-proxy 2>&1

@@ -7,6 +7,11 @@ ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
+# set BRANCH_PROXY or COMMIT_HASH_PROXY
+ARG BRANCH_PROXY=master
+ARG COMMIT_HASH_PROXY=""
+ARG REPO_PROXY=https://github.com/Zondax/rosetta-filecoin-proxy.git
+ARG PROXYPATH=/rosetta-proxy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -42,11 +47,40 @@ RUN apt-get update && \
 
 RUN make 2k && make install
 
+
+# Clone filecoin-indexing-rosetta-proxy
+RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
+  		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are empty'; \
+  		exit 1; \
+    fi
+
+RUN if [ ! -z "${BRANCH_PROXY}" ] && [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
+		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are set'; \
+		exit 1; \
+	fi
+
+WORKDIR ${PROXYPATH}
+RUN git clone --recurse-submodules ${REPO_PROXY} ${PROXYPATH}
+
+RUN if [ ! -z "${BRANCH_PROXY}" ]; then \
+        echo "Checking out to proxy branch: ${BRANCH_PROXY}"; \
+  		git checkout ${BRANCH_PROXY}; \
+    fi
+
+RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
+		echo "Checking out to proxy commit: ${COMMIT_HASH_PROXY}"; \
+		git checkout ${COMMIT_HASH_PROXY}; \
+	fi
+
+RUN make build
+
 # Create final container
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
+ARG ROSETTA_PORT=8080
 ARG LOTUS_API_PORT=1234
+ARG PROXYPATH=/rosetta-proxy
 
 # Install Lotus deps
 RUN apt-get update && \
@@ -58,7 +92,15 @@ RUN apt-get update && \
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 COPY --from=builder ${NODEPATH}/lotus/lotus-seed /usr/local/bin/
 
+#Install rosetta proxy
+COPY --from=builder ${PROXYPATH}/rosetta-filecoin-proxy /usr/local/bin
+
+ENV LOTUS_RPC_URL=ws://127.0.0.1:1234/rpc/v0
+ENV LOTUS_RPC_TOKEN=""
+
+EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
+
 RUN export LOTUS_SKIP_GENESIS_CHECK=_yes_
 
 RUN lotus fetch-params 2048 && lotus-seed pre-seal --sector-size 2KiB --num-sectors 2
