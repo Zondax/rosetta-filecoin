@@ -2,7 +2,7 @@
 FROM golang:1.16 as builder
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL=v1.11.2
+ARG BRANCH_FIL=v1.11.3
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
