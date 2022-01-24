@@ -143,7 +143,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: tools/devnet.dockerfile
+          file: tools/dev/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           labels: |
