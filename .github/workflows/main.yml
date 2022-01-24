@@ -26,3 +26,25 @@ jobs:
         run: |
           make build_devnet
 
+  build_butterfly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus devnet
+        run: |
+          make build_butterfly
+
+  build_calibration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus devnet
+        run: |
+          make build_calibration
+

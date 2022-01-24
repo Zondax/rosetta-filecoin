@@ -109,22 +109,22 @@ RUN lotus-seed genesis new localnet.json && \
    lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
 
 # Copy config files
-COPY ./tools/devnet_config.toml /devnet_config.toml
-COPY ./tools/devnet_rosetta_config.yaml /config.yaml
-COPY ./tools/dev_node/api /configFiles/api
+COPY ./tools/dev/config.toml /config.toml
+COPY ./tools/dev/rosetta_config.yaml /config.yaml
+COPY ./tools/dev/dev_node/api /configFiles/api
 
 # Copy keys files
-COPY ./tools/dev_node/token /configFiles/token
-COPY ./tools/dev_node/keystore /configFiles/keystore
+COPY ./tools/dev/node/token /configFiles/token
+COPY ./tools/dev/node/keystore /configFiles/keystore
 
 # Copy test actors keys
-COPY ./tools/test_actor_1.key /test_actor_1.key
-COPY ./tools/test_actor_2.key /test_actor_2.key
-COPY ./tools/test_actor_3.key /test_actor_3.key
+COPY ./tools/dev/test_actor_1.key /test_actor_1.key
+COPY ./tools/dev/test_actor_2.key /test_actor_2.key
+COPY ./tools/dev/test_actor_3.key /test_actor_3.key
 
 # Copy startup script
-COPY ./tools/start_devnet.sh /start_devnet.sh
+COPY ./tools/dev/start.sh /start.sh
 
-ENTRYPOINT ["/start_devnet.sh"]
+ENTRYPOINT ["/start.sh"]
 CMD ["",""]
 
