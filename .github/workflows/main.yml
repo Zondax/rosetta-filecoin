@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Build Lotus node
+      - name: Build Lotus Main
         run: |
           make build
 
@@ -22,7 +22,29 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Build Lotus devnet
+      - name: Build Lotus Devnet
         run: |
           make build_devnet
+
+  build_butterfly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus Butterfly
+        run: |
+          make build_butterfly
+
+  build_calibration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus Calibration
+        run: |
+          make build_calibration
 

@@ -58,7 +58,7 @@ RUN if [ ! -z $DISABLE_SYNC ]; then \
 		head -n 25 chain/sync_manager.go; \
 	fi
 
-RUN make build && make install
+RUN make calibnet && make install
 
 
 # Clone filecoin-indexing-rosetta-proxy
@@ -87,14 +87,6 @@ RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
 
 RUN make build
 
-
-
-
-###################################################
-
-
-
-
 # Create final container
 FROM ubuntu:20.04
 
@@ -115,7 +107,7 @@ COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 RUN lotus --version
 
 # Copy config files
-COPY ./tools/mainnet_config.toml /etc/lotus_config/mainnet.toml
+COPY ./tools/calibration/config.toml /etc/lotus_config/config.toml
 
 RUN mkdir -p /data/{node,storage}
 ENV LOTUS_PATH=/data/node/
@@ -133,6 +125,6 @@ EXPOSE $LOTUS_API_PORT
 #Copy entrypoint script
 COPY --from=builder ${PROXYPATH}/start.sh /
 
-ENTRYPOINT ["/start.sh", "--config", "/etc/lotus_config/mainnet.toml"]
+ENTRYPOINT ["/start.sh", "--config", "/etc/lotus_config/config.toml"]
 CMD ["",""]
 

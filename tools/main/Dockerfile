@@ -15,6 +15,11 @@ ARG PROXYPATH=/rosetta-proxy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install Lotus deps
+RUN apt-get update && \
+    apt-get install -yy apt-utils && \
+    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+
 # Clone Lotus
 RUN if [ -z "${BRANCH_FIL}" ] && [ -z "${COMMIT_HASH_FIL}" ]; then \
   		echo 'Error: Both BRANCH_FIL and COMMIT_HASH_FIL are empty'; \
@@ -25,7 +30,6 @@ RUN if [ ! -z "${BRANCH_FIL}" ] && [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 		echo 'Error: Both BRANCH_FIL and COMMIT_HASH_FIL are set'; \
 		exit 1; \
 	fi
-
 
 WORKDIR ${NODEPATH}
 RUN git clone ${REPO_FIL} ${NODEPATH}
@@ -40,12 +44,21 @@ RUN if [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 		git checkout ${COMMIT_HASH_FIL}; \
 	fi
 
-# Install Lotus deps
-RUN apt-get update && \
-    apt-get install -yy apt-utils && \
-    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 
-RUN make 2k && make install
+ENV RUSTFLAGS="-C target-cpu=native -g"
+ENV FFI_BUILD_FROM_SOURCE=1
+ARG DISABLE_SYNC
+
+# This will disable sync by setting the number of sync workers to 0
+RUN if [ ! -z $DISABLE_SYNC ]; then \
+		echo "\n\n\nWARNING : Patching + disabling synchronization\n\n\n"; \
+		sed -i -E 's/^[ \t]*MaxSyncWorkers[ \t]*=[ \t]*[0-9]*$/MaxSyncWorkers=0/g' chain/sync_manager.go; \
+		head -n 25 chain/sync_manager.go; \
+	fi
+
+RUN make build && make install
 
 
 # Clone filecoin-indexing-rosetta-proxy
@@ -74,6 +87,8 @@ RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
 
 RUN make build
 
+###################################################
+
 # Create final container
 FROM ubuntu:20.04
 
@@ -85,12 +100,20 @@ ARG PROXYPATH=/rosetta-proxy
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils  && \
-    apt-get install -yy curl  && \
+    apt-get install -yy curl && \
     apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1 hwloc libhwloc-dev
 
 # Install Lotus
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
-COPY --from=builder ${NODEPATH}/lotus/lotus-seed /usr/local/bin/
+#Check Lotus installation
+RUN lotus --version
+
+# Copy config files
+COPY ./tools/main/config.toml /etc/lotus_config/mainnet.toml
+
+RUN mkdir -p /data/{node,storage}
+ENV LOTUS_PATH=/data/node/
+ENV LOTUS_STORAGE_PATH=/data/storage/
 
 #Install rosetta proxy
 COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
@@ -101,30 +124,9 @@ ENV LOTUS_RPC_TOKEN=""
 EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
 
-RUN export LOTUS_SKIP_GENESIS_CHECK=_yes_
+#Copy entrypoint script
+COPY --from=builder ${PROXYPATH}/start.sh /
 
-RUN lotus fetch-params 2048 && lotus-seed pre-seal --sector-size 2KiB --num-sectors 2
-
-RUN lotus-seed genesis new localnet.json && \
-   lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
-
-# Copy config files
-COPY ./tools/devnet_config.toml /devnet_config.toml
-COPY ./tools/devnet_rosetta_config.yaml /config.yaml
-COPY ./tools/dev_node/api /configFiles/api
-
-# Copy keys files
-COPY ./tools/dev_node/token /configFiles/token
-COPY ./tools/dev_node/keystore /configFiles/keystore
-
-# Copy test actors keys
-COPY ./tools/test_actor_1.key /test_actor_1.key
-COPY ./tools/test_actor_2.key /test_actor_2.key
-COPY ./tools/test_actor_3.key /test_actor_3.key
-
-# Copy startup script
-COPY ./tools/start_devnet.sh /start_devnet.sh
-
-ENTRYPOINT ["/start_devnet.sh"]
+ENTRYPOINT ["/start.sh", "--config", "/etc/lotus_config/mainnet.toml"]
 CMD ["",""]
 

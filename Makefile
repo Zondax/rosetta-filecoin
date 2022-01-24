@@ -16,10 +16,18 @@
 
 DOCKER_IMAGE=zondax/rosetta-filecoin:latest
 DOCKER_DEVNET_IMAGE=zondax/filecoin-devnet:latest
-DOCKERFILE_DEVNET=./tools/devnet.dockerfile
+DOCKER_BUTTERFLY_IMAGE=zondax/filecoin-butterfly:latest
+DOCKER_CALIBRATION_IMAGE=zondax/filecoin-calibration:latest
+
+DOCKERFILE_MAIN=./tools/main/Dockerfile
+DOCKERFILE_DEVNET=./tools/dev/Dockerfile
+DOCKERFILE_BUTTERFLY=./tools/butterfly/Dockerfile
+DOCKERFILE_CALIBRATION=./tools/calibration/Dockerfile
 
 CONTAINER_NAME=lotusnode
 CONTAINER_DEVNET_NAME=filecoin-devnet
+CONTAINER_BUTTERFLY_NAME=filecoin-butterfly
+CONTAINER_CALIBRATION_NAME=filecoin-calibration
 
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
 ROSETTA_PORT=8080
@@ -90,26 +98,36 @@ endef
 all: run
 .PHONY: all
 
+########################## BUILD ###################################
 build:
-	docker build -t $(DOCKER_IMAGE) .
+	docker build -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) .
 .PHONY: build
 
 build_nosync:
-	docker build -t $(DOCKER_IMAGE) --build-arg DISABLE_SYNC=1 .
+	docker build -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) --build-arg DISABLE_SYNC=1 .
 .PHONY: build
 
 build_devnet:
 	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
 .PHONY: build_devnet
 
+build_butterfly:
+	docker build -t $(DOCKER_BUTTERFLY_IMAGE) -f $(DOCKERFILE_BUTTERFLY) .
+.PHONY: build_butterfly
+
+build_calibration:
+	docker build -t $(DOCKER_CALIBRATION_IMAGE) -f $(DOCKERFILE_CALIBRATION) .
+.PHONY: build_calibration
+
 rebuild:
-	docker build --no-cache -t $(DOCKER_IMAGE) .
+	docker build --no-cache -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) .
 .PHONY: rebuild
 
 rebuild_devnet:
 	docker build --no-cache -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
 .PHONY: rebuild_devnet
 
+########################## RUN ###################################
 clean:
 	docker rmi $(DOCKER_IMAGE)
 .PHONY: clean
