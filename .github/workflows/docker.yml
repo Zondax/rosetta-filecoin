@@ -199,7 +199,7 @@ jobs:
   
 
   push_calibration_to_registry:
-    name: Push Butterfly Docker image to Zondax Harbor
+    name: Push Calibration Docker image to Zondax Harbor
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
