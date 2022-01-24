@@ -107,6 +107,7 @@ COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 RUN lotus --version
 
 # Copy config files
+COPY ./tools/butterfly/rosetta_config.yaml /config.yaml
 COPY ./tools/butterfly/config.toml /etc/lotus_config/config.toml
 
 RUN mkdir -p /data/{node,storage}
