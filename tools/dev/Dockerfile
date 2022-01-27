@@ -109,7 +109,7 @@ RUN lotus-seed genesis new localnet.json && \
    lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
 
 # Copy config files
-COPY ./tools/dev/config.toml /config.toml
+COPY ./tools/dev/config.toml /etc/lotus_config/config.toml
 COPY ./tools/dev/rosetta_config.yaml /config.yaml
 COPY ./tools/dev/node/api /configFiles/api
 
