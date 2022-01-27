@@ -1,8 +1,6 @@
 name: Publish Butterfly Docker Image with Tag
 on:
-  release:
-    types:
-      - created
+  push:
     tags:
       - "butterfly_*"
 
