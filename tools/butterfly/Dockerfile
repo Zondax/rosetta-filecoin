@@ -110,6 +110,14 @@ RUN lotus --version
 COPY ./tools/butterfly/files/rosetta_config.yaml /config.yaml
 COPY ./tools/butterfly/files/config.toml /etc/lotus_config/config.toml
 
+# Copy test actors keys
+COPY ./tools/butterfly/files/test_actor_1.key /test_actor_1.key
+COPY ./tools/butterfly/files/test_actor_2.key /test_actor_2.key
+COPY ./tools/butterfly/files/test_actor_3.key /test_actor_3.key
+
+# Copy startup script
+COPY ./tools/butterfly/files/start.sh /start.sh
+
 RUN mkdir -p /data/{node,storage}
 ENV LOTUS_PATH=/data/node/
 ENV LOTUS_STORAGE_PATH=/data/storage/
@@ -126,6 +134,6 @@ EXPOSE $LOTUS_API_PORT
 #Copy entrypoint script
 COPY --from=builder ${PROXYPATH}/start.sh /
 
-ENTRYPOINT ["/start.sh", "--config", "/etc/lotus_config/config.toml"]
+ENTRYPOINT ["/start.sh"]
 CMD ["",""]
 
