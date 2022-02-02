@@ -107,8 +107,8 @@ COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 RUN lotus --version
 
 # Copy config files
-COPY ./tools/calibration/rosetta_config.yaml /config.yaml
-COPY ./tools/calibration/config.toml /etc/lotus_config/config.toml
+COPY ./tools/calibration/files/rosetta_config.yaml /config.yaml
+COPY ./tools/calibration/files/config.toml /etc/lotus_config/config.toml
 
 RUN mkdir -p /data/{node,storage}
 ENV LOTUS_PATH=/data/node/
