@@ -29,13 +29,13 @@ lotus send t01005 5000
 LOTUS_CHAIN_INDEX_CACHE=32768
 LOTUS_CHAIN_TIPSET_CACHE=8192
 
-until [ -f /root/.lotus/token ]
+until [ -f /data/node/token ]
 do
      echo -e "${GREEN}Waiting for token file to be created by lotus... ${NC}$"
      sleep 5
 done
 
-LOTUS_RPC_TOKEN=$( cat /root/.lotus/token )
+LOTUS_RPC_TOKEN=$( cat /data/node/token )
 
 echo -e "${GREEN}### Launching filecoin-indexing-rosetta-proxy${NC}"
 filecoin-indexing-rosetta-proxy 2>&1
