@@ -131,9 +131,6 @@ ENV LOTUS_RPC_TOKEN=""
 EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
 
-#Copy entrypoint script
-COPY --from=builder ${PROXYPATH}/start.sh /
-
 ENTRYPOINT ["/start.sh"]
 CMD ["",""]
 
