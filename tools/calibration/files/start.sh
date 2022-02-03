@@ -6,25 +6,23 @@ NC='\033[0m'
 lotus daemon --config /etc/lotus_config/config.toml &
 sleep 5
 
+lotus sync wait
+
 # Import test actors
 lotus wallet import /test_actor_1.key # t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba
 lotus wallet import /test_actor_2.key # t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa
 lotus wallet import /test_actor_3.key # f1itpqzzcx6yf52oc35dgsoxfqkoxpy6kdmygbaja
 
-sleep 20
+lotus wallet set-default t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba
 
-# Fund accounts
-echo -e "${GREEN}Funding accounts...${NC}"
-lotus send t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba 1000
-lotus send t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa 1000
-lotus send f1itpqzzcx6yf52oc35dgsoxfqkoxpy6kdmygbaja 1000
-lotus send t137sjdbgunloi7couiy4l5nc7pd6k2jmq32vizpy 1000
+sleep 20
 
 # Create test msig actor and send some tokens to it
 echo -e "${GREEN}Creating multisig actor...${NC}"
 lotus msig create --required 1 t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba t1x5x7ekq5f2cjkk57ee3lismwmzu5rbhkhnsrooa # t01005
-lotus send t01005 5000
 
+# Fund accounts
+echo -e "${GREEN}To fund accounts use https://faucet.calibration.fildev.network/${NC}"
 
 LOTUS_CHAIN_INDEX_CACHE=32768
 LOTUS_CHAIN_TIPSET_CACHE=8192
