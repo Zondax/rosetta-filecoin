@@ -1,5 +1,5 @@
 # Create builder container
-FROM golang:1.16 as builder
+FROM golang:1.17 as builder
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
 ARG BRANCH_FIL=v1.12.0
