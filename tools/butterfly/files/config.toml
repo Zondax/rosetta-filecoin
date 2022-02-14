@@ -5,10 +5,6 @@
   Timeout = "30s"
 #
 [Libp2p]
-  BootstrapPeers = [
-    "/dns4/bootstrap-0.butterfly.fildev.network/tcp/1347/p2p/12D3KooWBdRCBLUeKvoy22u5DcXs61adFn31v8WWCZgmBjDCjbsC",
-    "/dns4/bootstrap-1.butterfly.fildev.network/tcp/1347/p2p/12D3KooWDUQJBA18njjXnG9RtLxoN3muvdU7PEy55QorUEsdAqdy"
-  ]
 #  ListenAddresses = ["/ip4/0.0.0.0/tcp/0", "/ip6/::/tcp/0"]
 #  AnnounceAddresses = []
 #  NoAnnounceAddresses = []
