@@ -6,7 +6,7 @@ on:
 
 jobs:
   push_calibration_to_registry:
-    name: Push Calibration Docker image to Zondax Harbor
+    name: Push Calibration Docker tagged image to Zondax Harbor
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
