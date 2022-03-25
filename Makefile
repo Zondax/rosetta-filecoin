@@ -116,7 +116,7 @@ build_butterfly:
 .PHONY: build_butterfly
 
 build_calibration:
-	docker build -t $(DOCKER_CALIBRATION_IMAGE) -f $(DOCKERFILE_CALIBRATION) .
+	docker build -t $(DOCKER_CALIBRATION_IMAGE) -f $(DOCKERFILE_CALIBRATION) --build-arg TOKEN=${READ_TOKEN} .
 .PHONY: build_calibration
 
 rebuild:
