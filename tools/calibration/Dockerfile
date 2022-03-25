@@ -25,6 +25,32 @@ RUN apt-get update && \
     apt-get install -yy apt-utils && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
 
+# Clone filecoin-indexing-rosetta-proxy
+RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
+  		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are empty'; \
+  		exit 1; \
+    fi
+
+RUN if [ ! -z "${BRANCH_PROXY}" ] && [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
+		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are set'; \
+		exit 1; \
+	fi
+
+WORKDIR ${PROXYPATH}
+RUN git clone --recurse-submodules ${REPO_PROXY} ${PROXYPATH}
+
+RUN if [ ! -z "${BRANCH_PROXY}" ]; then \
+        echo "Checking out to proxy branch: ${BRANCH_PROXY}"; \
+  		git checkout ${BRANCH_PROXY}; \
+    fi
+
+RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
+		echo "Checking out to proxy commit: ${COMMIT_HASH_PROXY}"; \
+		git checkout ${COMMIT_HASH_PROXY}; \
+	fi
+
+RUN make build
+
 # Clone Lotus
 RUN if [ -z "${BRANCH_FIL}" ] && [ -z "${COMMIT_HASH_FIL}" ]; then \
   		echo 'Error: Both BRANCH_FIL and COMMIT_HASH_FIL are empty'; \
@@ -65,32 +91,6 @@ RUN if [ ! -z $DISABLE_SYNC ]; then \
 
 RUN make calibnet && make install
 
-
-# Clone filecoin-indexing-rosetta-proxy
-RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
-  		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are empty'; \
-  		exit 1; \
-    fi
-
-RUN if [ ! -z "${BRANCH_PROXY}" ] && [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
-		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are set'; \
-		exit 1; \
-	fi
-
-WORKDIR ${PROXYPATH}
-RUN git clone --recurse-submodules ${REPO_PROXY} ${PROXYPATH}
-
-RUN if [ ! -z "${BRANCH_PROXY}" ]; then \
-        echo "Checking out to proxy branch: ${BRANCH_PROXY}"; \
-  		git checkout ${BRANCH_PROXY}; \
-    fi
-
-RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
-		echo "Checking out to proxy commit: ${COMMIT_HASH_PROXY}"; \
-		git checkout ${COMMIT_HASH_PROXY}; \
-	fi
-
-RUN make build
 
 # Create final container
 FROM ubuntu:20.04
