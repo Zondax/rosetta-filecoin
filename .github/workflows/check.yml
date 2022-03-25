@@ -46,6 +46,5 @@ jobs:
           submodules: true
       - name: Build Lotus Calibration
         run: |
-          READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
-          make build_calibration
+          READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }} make build_calibration
 
