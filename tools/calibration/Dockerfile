@@ -1,6 +1,11 @@
 # Create builder container
 FROM golang:1.17 as builder
 
+# Configure token for reading private repos
+ARG TOKEN
+ENV GOPRIVATE=github.com/Zondax/*
+RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
+
 # set BRANCH_FIL or COMMIT_HASH_FIL
 ARG BRANCH_FIL="v1.15.1-rc2"
 ARG COMMIT_HASH_FIL=""
