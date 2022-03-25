@@ -8,7 +8,7 @@ ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
-ARG BRANCH_PROXY=v1.1200.1
+ARG BRANCH_PROXY=v1.1402.0
 ARG COMMIT_HASH_PROXY=""
 ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
@@ -48,7 +48,7 @@ RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 ENV RUSTFLAGS="-C target-cpu=native -g"
-ENV FFI_BUILD_FROM_SOURCE=1
+#ENV FFI_BUILD_FROM_SOURCE=1
 ARG DISABLE_SYNC
 
 # This will disable sync by setting the number of sync workers to 0
