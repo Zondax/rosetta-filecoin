@@ -100,7 +100,7 @@ all: run
 
 ########################## BUILD ###################################
 build:
-	docker build -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) .
+	docker build -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) --build-arg TOKEN=${READ_TOKEN} .
 .PHONY: build
 
 build_nosync:
@@ -108,11 +108,11 @@ build_nosync:
 .PHONY: build
 
 build_devnet:
-	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) .
+	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) --build-arg TOKEN=${READ_TOKEN} .
 .PHONY: build_devnet
 
 build_butterfly:
-	docker build -t $(DOCKER_BUTTERFLY_IMAGE) -f $(DOCKERFILE_BUTTERFLY) .
+	docker build -t $(DOCKER_BUTTERFLY_IMAGE) -f $(DOCKERFILE_BUTTERFLY) --build-arg TOKEN=${READ_TOKEN} .
 .PHONY: build_butterfly
 
 build_calibration:
