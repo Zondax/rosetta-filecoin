@@ -1,6 +1,11 @@
 # Create builder container
 FROM golang:1.17 as builder
 
+# Configure token for reading private repos
+ARG TOKEN
+ENV GOPRIVATE=github.com/Zondax/*
+RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
+
 # set BRANCH_FIL or COMMIT_HASH_FIL
 ARG BRANCH_FIL="v1.14.1"
 ARG COMMIT_HASH_FIL=""
@@ -8,7 +13,7 @@ ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
-ARG BRANCH_PROXY=v1.1200.1
+ARG BRANCH_PROXY=v1.1402.1
 ARG COMMIT_HASH_PROXY=""
 ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy

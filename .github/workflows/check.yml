@@ -13,6 +13,7 @@ jobs:
           submodules: true
       - name: Build Lotus Main
         run: |
+          export READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
           make build
 
   build_devnet:
@@ -24,6 +25,7 @@ jobs:
           submodules: true
       - name: Build Lotus Devnet
         run: |
+          export READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
           make build_devnet
 
   build_butterfly:
@@ -35,6 +37,7 @@ jobs:
           submodules: true
       - name: Build Lotus Butterfly
         run: |
+          export READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
           make build_butterfly
 
   build_calibration:
