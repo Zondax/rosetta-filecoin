@@ -7,7 +7,7 @@ ENV GOPRIVATE=github.com/Zondax/*
 RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL="v1.15.1-rc2"
+ARG BRANCH_FIL="v1.15.1"
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
@@ -132,9 +132,6 @@ COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
 
 ENV LOTUS_RPC_URL=ws://127.0.0.1:1234/rpc/v0
 ENV LOTUS_RPC_TOKEN=""
-
-# Enable using WASM-compiled builtin actors
-ENV LOTUS_USE_FVM_EXPERIMENTAL=1
 
 EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
