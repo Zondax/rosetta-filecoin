@@ -130,6 +130,9 @@ COPY ./tools/dev/files/test_actor_3.key /test_actor_3.key
 # Copy startup script
 COPY ./tools/dev/files/start.sh /start.sh
 
+# Copy check lotus sync script
+COPY ./tools/check_lotus_sync.sh /usr/local/bin/
+
 ENTRYPOINT ["/start.sh"]
 CMD ["",""]
 
