@@ -7,7 +7,7 @@ ENV GOPRIVATE=github.com/Zondax/*
 RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL="release/v1.16.0"
+ARG BRANCH_FIL="v1.16.0-pre-rc"
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
@@ -53,7 +53,7 @@ RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 ENV RUSTFLAGS="-C target-cpu=native -g"
-ENV FFI_BUILD_FROM_SOURCE=1
+ENV FFI_BUILD_FROM_SOURCE=0
 ARG DISABLE_SYNC
 
 # This will disable sync by setting the number of sync workers to 0
