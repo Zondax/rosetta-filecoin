@@ -3,6 +3,8 @@
 GREEN='\e[42m'
 NC='\033[0m'
 
+export LOTUS_VM_ENABLE_TRACING=1
+
 mkdir -p /root/.lotus && cp -fr /configFiles/* /root/.lotus
 chmod 0600 -R /root/.lotus
 
