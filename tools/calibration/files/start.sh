@@ -3,6 +3,8 @@
 GREEN='\e[42m'
 NC='\033[0m'
 
+export LOTUS_VM_ENABLE_TRACING=1
+
 lotus daemon --config /etc/lotus_config/config.toml &
 sleep 5
 
