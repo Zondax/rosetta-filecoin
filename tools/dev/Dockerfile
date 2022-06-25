@@ -20,6 +20,12 @@ ARG PROXYPATH=/rosetta-proxy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+ENV RUSTFLAGS="-C target-cpu=native -g"
+ENV FFI_BUILD_FROM_SOURCE=1
+
 # Clone Lotus
 RUN if [ -z "${BRANCH_FIL}" ] && [ -z "${COMMIT_HASH_FIL}" ]; then \
   		echo 'Error: Both BRANCH_FIL and COMMIT_HASH_FIL are empty'; \
