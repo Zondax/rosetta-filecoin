@@ -79,7 +79,7 @@ RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 ENV RUSTFLAGS="-C target-cpu=native -g"
-ENV FFI_BUILD_FROM_SOURCE=1
+ENV FFI_BUILD_FROM_SOURCE=0
 ARG DISABLE_SYNC
 
 # This will disable sync by setting the number of sync workers to 0
