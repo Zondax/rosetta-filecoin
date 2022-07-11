@@ -38,7 +38,7 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: registry.hub.docker.com
+
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
@@ -88,7 +88,7 @@ jobs:
   #       name: Login to Zondax Harbor Registry
   #       uses: docker/login-action@v1
   #       with:
-  #         registry: registry.hub.docker.com
+  #
   #         username: ${{ secrets.DOCKERHUB_USER }}
   #         password: ${{ secrets.DOCKERHUB_TOKEN }}
   #     -
@@ -136,7 +136,7 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: registry.hub.docker.com
+
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
@@ -182,7 +182,7 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: registry.hub.docker.com
+
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
@@ -229,7 +229,7 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: registry.hub.docker.com
+
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
