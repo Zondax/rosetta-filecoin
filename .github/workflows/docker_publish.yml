@@ -16,7 +16,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=harbor.zondax.net/zondax/filecoin-node
+          DOCKER_IMAGE=zondax/filecoin-node
           VERSION=edge
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
@@ -38,9 +38,9 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: harbor.zondax.net
-          username: ${{ secrets.HARBOR_USER }}
-          password: ${{ secrets.HARBOR_PASSWORD }}
+          registry: registry.hub.docker.com
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -64,7 +64,7 @@ jobs:
   #       name: Prepare
   #       id: prep
   #       run: |
-  #         DOCKER_IMAGE=harbor.zondax.net/zondax/filecoin-node-nosync
+  #         DOCKER_IMAGE=zondax/filecoin-node-nosync
   #         VERSION=edge
   #         if [[ $GITHUB_REF == refs/tags/* ]]; then
   #           VERSION=${GITHUB_REF#refs/tags/}
@@ -88,9 +88,9 @@ jobs:
   #       name: Login to Zondax Harbor Registry
   #       uses: docker/login-action@v1
   #       with:
-  #         registry: harbor.zondax.net
-  #         username: ${{ secrets.HARBOR_USER }}
-  #         password: ${{ secrets.HARBOR_PASSWORD }}
+  #         registry: registry.hub.docker.com
+  #         username: ${{ secrets.DOCKERHUB_USER }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
   #     -
   #       name: Build and push
   #       uses: docker/build-push-action@v2
@@ -114,7 +114,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=harbor.zondax.net/zondax/filecoin-node-devnet
+          DOCKER_IMAGE=zondax/filecoin-node-devnet
           VERSION=edge
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
@@ -136,9 +136,9 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: harbor.zondax.net
-          username: ${{ secrets.HARBOR_USER }}
-          password: ${{ secrets.HARBOR_PASSWORD }}
+          registry: registry.hub.docker.com
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -160,7 +160,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=harbor.zondax.net/zondax/filecoin-node-butterfly
+          DOCKER_IMAGE=zondax/filecoin-node-butterfly
           VERSION=edge
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
@@ -182,9 +182,9 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: harbor.zondax.net
-          username: ${{ secrets.HARBOR_USER }}
-          password: ${{ secrets.HARBOR_PASSWORD }}
+          registry: registry.hub.docker.com
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -207,7 +207,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=harbor.zondax.net/zondax/filecoin-node-calibration
+          DOCKER_IMAGE=zondax/filecoin-node-calibration
           VERSION=edge
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
@@ -229,9 +229,9 @@ jobs:
       - name: Login to Zondax Harbor Registry
         uses: docker/login-action@v1
         with:
-          registry: harbor.zondax.net
-          username: ${{ secrets.HARBOR_USER }}
-          password: ${{ secrets.HARBOR_PASSWORD }}
+          registry: registry.hub.docker.com
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
