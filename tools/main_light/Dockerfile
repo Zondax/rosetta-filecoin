@@ -130,7 +130,7 @@ EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
 
 #Copy entrypoint script
-COPY start_lightnode.sh /
+COPY ./tools/main_light/start_lightnode.sh /
 
 # Copy check lotus sync script
 COPY ./tools/check_lotus_sync.sh /usr/local/bin/
