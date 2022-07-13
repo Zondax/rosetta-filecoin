@@ -78,6 +78,18 @@ define run_docker
     $(DOCKER_IMAGE) $(RUN_ARGS)
 endef
 
+define run_docker_light
+    docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
+    --dns 8.8.8.8 \
+    -m $(MAX_RAM) \
+    --oom-kill-disable \
+    --ulimit nofile=900000 \
+    --name $(CONTAINER_NAME) \
+    -p $(ROSETTA_PORT):$(ROSETTA_PORT) \
+    -p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
+    $(DOCKER_IMAGE_LIGHT) $(RUN_ARGS)
+endef
+
 define run_devnet
     docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
     --dns 8.8.8.8 \
@@ -141,6 +153,10 @@ clean:
 run: build
 	$(call run_docker)
 .PHONY: run
+
+run_light: build_light
+	$(call run_docker_light)
+.PHONY: run_light
 
 run_devnet: build_devnet
 	$(call run_devnet)
