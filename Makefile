@@ -15,11 +15,13 @@
 #********************************************************************************
 
 DOCKER_IMAGE=zondax/rosetta-filecoin:latest
+DOCKER_IMAGE_LIGHT=zondax/rosetta-filecoin-light:latest
 DOCKER_DEVNET_IMAGE=zondax/filecoin-devnet:latest
 DOCKER_BUTTERFLY_IMAGE=zondax/filecoin-butterfly:latest
 DOCKER_CALIBRATION_IMAGE=zondax/filecoin-calibration:latest
 
 DOCKERFILE_MAIN=./tools/main/Dockerfile
+DOCKERFILE_LIGHT_MAIN=./tools/main_light/Dockerfile
 DOCKERFILE_DEVNET=./tools/dev/Dockerfile
 DOCKERFILE_BUTTERFLY=./tools/butterfly/Dockerfile
 DOCKERFILE_CALIBRATION=./tools/calibration/Dockerfile
@@ -106,6 +108,10 @@ build:
 build_nosync:
 	docker build -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) --build-arg DISABLE_SYNC=1 .
 .PHONY: build
+
+build_light:
+	docker build -t $(DOCKER_IMAGE_LIGHT) -f $(DOCKERFILE_LIGHT_MAIN) --build-arg TOKEN=${READ_TOKEN} .
+.PHONY: build_light
 
 build_devnet:
 	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) --build-arg TOKEN=${READ_TOKEN} .
