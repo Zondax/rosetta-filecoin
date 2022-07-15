@@ -16,6 +16,18 @@ jobs:
           export READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
           make build
 
+  build_light_node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus Main
+        run: |
+          export READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
+          make build_light
+
   build_devnet:
     runs-on: ubuntu-latest
     steps:

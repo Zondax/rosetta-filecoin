@@ -15,11 +15,13 @@
 #********************************************************************************
 
 DOCKER_IMAGE=zondax/rosetta-filecoin:latest
+DOCKER_IMAGE_LIGHT=zondax/rosetta-filecoin-light:latest
 DOCKER_DEVNET_IMAGE=zondax/filecoin-devnet:latest
 DOCKER_BUTTERFLY_IMAGE=zondax/filecoin-butterfly:latest
 DOCKER_CALIBRATION_IMAGE=zondax/filecoin-calibration:latest
 
 DOCKERFILE_MAIN=./tools/main/Dockerfile
+DOCKERFILE_LIGHT_MAIN=./tools/main_light/Dockerfile
 DOCKERFILE_DEVNET=./tools/dev/Dockerfile
 DOCKERFILE_BUTTERFLY=./tools/butterfly/Dockerfile
 DOCKERFILE_CALIBRATION=./tools/calibration/Dockerfile
@@ -76,6 +78,18 @@ define run_docker
     $(DOCKER_IMAGE) $(RUN_ARGS)
 endef
 
+define run_docker_light
+    docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
+    --dns 8.8.8.8 \
+    -m $(MAX_RAM) \
+    --oom-kill-disable \
+    --ulimit nofile=900000 \
+    --name $(CONTAINER_NAME) \
+    -p $(ROSETTA_PORT):$(ROSETTA_PORT) \
+    -p $(LOTUS_API_PORT):$(LOTUS_API_PORT) \
+    $(DOCKER_IMAGE_LIGHT) $(RUN_ARGS)
+endef
+
 define run_devnet
     docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
     --dns 8.8.8.8 \
@@ -107,6 +121,10 @@ build_nosync:
 	docker build -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) --build-arg DISABLE_SYNC=1 .
 .PHONY: build
 
+build_light:
+	docker build -t $(DOCKER_IMAGE_LIGHT) -f $(DOCKERFILE_LIGHT_MAIN) --build-arg TOKEN=${READ_TOKEN} .
+.PHONY: build_light
+
 build_devnet:
 	docker build -t $(DOCKER_DEVNET_IMAGE) -f $(DOCKERFILE_DEVNET) --build-arg TOKEN=${READ_TOKEN} .
 .PHONY: build_devnet
@@ -135,6 +153,10 @@ clean:
 run: build
 	$(call run_docker)
 .PHONY: run
+
+run_light: build_light
+	$(call run_docker_light)
+.PHONY: run_light
 
 run_devnet: build_devnet
 	$(call run_devnet)
