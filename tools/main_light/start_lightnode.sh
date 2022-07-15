@@ -33,7 +33,19 @@ echo -e "${GRN}Running command: ${OFF}${BOLDW}lotus daemon $1 $2${OFF}"
 [ -z "$GOLOG_LOG_LEVEL" ] && export GOLOG_LOG_LEVEL=INFO
 echo -e "${GRN}Using Lotus logger level:${OFF}${BOLDW} ${GOLOG_LOG_LEVEL} ${OFF}"
 
-lotus daemon --import-snapshot https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car &
+echo -e "${GRN} Downloading latest network snapshot ${code} ${OFF}"
+curl -sI https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car | \
+perl -ne '/x-amz-website-redirect-location:\s(.+)\.car/ && print "$1.car"' | xargs wget -O snapshot.car
+
+echo -e "${GRN} Checking sha256sum${code} ${OFF}"
+curl -sI https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car | \
+perl -ne '/x-amz-website-redirect-location:\s(.+)\.car/ && print "$1.sha256sum"' | xargs wget -O snapshot.sha256sum
+
+# Replace the filenames for both `.sha256sum` and `.car` files based on the snapshot you downloaded.
+echo "$(cut -c 1-64 snapshot.sha256sum) snapshot.car" | sha256sum --check
+
+# Replace the filename for the `.car` file based on the snapshot you downloaded.
+lotus daemon --import-snapshot snapshot.car
 
 trap 'error ${LINENO}' ERR
 trap 'exit_func 0' INT SIGINT
