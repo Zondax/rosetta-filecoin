@@ -45,7 +45,7 @@ perl -ne '/x-amz-website-redirect-location:\s(.+)\.car/ && print "$1.sha256sum"'
 echo "$(cut -c 1-64 snapshot.sha256sum) snapshot.car" | sha256sum --check
 
 # Replace the filename for the `.car` file based on the snapshot you downloaded.
-lotus daemon --import-snapshot snapshot.car
+lotus daemon --import-snapshot snapshot.car --config /etc/lotus_config/mainnet.toml
 
 trap 'error ${LINENO}' ERR
 trap 'exit_func 0' INT SIGINT

@@ -135,6 +135,6 @@ COPY ./tools/main_light/start_lightnode.sh /
 # Copy check lotus sync script
 COPY ./tools/check_lotus_sync.sh /usr/local/bin/
 
-ENTRYPOINT ["/start_lightnode.sh", "--config", "/etc/lotus_config/mainnet.toml"]
+ENTRYPOINT ["/start_lightnode.sh"]
 CMD ["",""]
 
