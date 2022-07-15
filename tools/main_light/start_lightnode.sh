@@ -35,7 +35,7 @@ echo -e "${GRN}Using Lotus logger level:${OFF}${BOLDW} ${GOLOG_LOG_LEVEL} ${OFF}
 
 echo -e "${GRN} Downloading latest network snapshot ${code} ${OFF}"
 curl -sI https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car | \
-perl -ne '/x-amz-website-redirect-location:\s(.+)\.car/ && print "n$1.car"' | xargs wget -O snapshot.car
+perl -ne '/x-amz-website-redirect-location:\s(.+)\.car/ && print "$1.car"' | xargs wget -O snapshot.car
 
 echo -e "${GRN} Checking sha256sum${code} ${OFF}"
 curl -sI https://fil-chain-snapshots-fallback.s3.amazonaws.com/mainnet/minimal_finality_stateroots_latest.car | \
