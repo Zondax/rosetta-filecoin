@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: zondax-production
+    kubernetes.io/tls-acme: "true"
+  name: fil-node-ingress
+spec:
+  rules:
+    - host: fil.node.env.zondax.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: fil-node-srv
+                port:
+                  number: 1234
+            path: /rpc
+            pathType: Prefix
+          - backend:
+              service:
+                name: fil-node-srv
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - fil.node.env.zondax.xyz
+      secretName: fil-node-ingress-tls

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fil-node
+spec:
+  selector:
+    matchLabels:
+      app: fil-node
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '1234'
+        prometheus.io/path: '/debug/metrics'
+      labels:
+        app: fil-node
+    spec:
+      containers:
+        - name: lotus-node
+          image: image:tag
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 1234
+            - containerPort: 8080
