@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fil-node-srv
+  labels:
+    app: fil-node-srv
+spec:
+  ports:
+    - port: 1234
+      targetPort: 1234
+      name: lotus-port
+    - port: 8080
+      targetPort: 8080
+      name: rosetta-port
+  selector:
+    app: fil-node
