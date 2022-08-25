@@ -54,10 +54,14 @@ RUN if [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils && \
-    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev software-properties-common python
+
 
 RUN make 2k && make install
-RUN go install golang.org/x/tools/cmd/goimports@latest && make gen && make docsgen-cli
+
+RUN go install golang.org/x/tools/cmd/goimports@latest
+
+RUN make gen && make docsgen-cli
 
 # Clone filecoin-indexing-rosetta-proxy
 RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
