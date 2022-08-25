@@ -57,7 +57,7 @@ RUN apt-get update && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
 
 RUN make 2k && make install
-
+RUN go install golang.org/x/tools/cmd/goimports@latest && make gen && make docsgen-cli
 
 # Clone filecoin-indexing-rosetta-proxy
 RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
