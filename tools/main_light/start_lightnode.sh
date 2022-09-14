@@ -7,7 +7,7 @@ BOLDW='\e[1m'
 OFF='\e[0m'
 
 SNAPSHOT_DIR=/snapshot
-SNAPSHOT_FILE=snapshot.car
+SNAPSHOT_FILE=${SNAPSHOT_DIR}/snapshot.car
 
 error() {
   local message="$2"
@@ -36,12 +36,11 @@ echo -e "${GRN}Running command: ${OFF}${BOLDW}lotus daemon $1 $2${OFF}"
 [ -z "$GOLOG_LOG_LEVEL" ] && export GOLOG_LOG_LEVEL=INFO
 echo -e "${GRN}Using Lotus logger level:${OFF}${BOLDW} ${GOLOG_LOG_LEVEL} ${OFF}"
 
-if [ -f "$SNAPSOT_DIR/$SNAPSHOT_FILE" ]; then
+if [ -f "$SNAPSHOT_FILE" ]; then
   error("Snapshot file not found!")
 fi
 
-# Replace the filename for the `.car` file based on the snapshot you downloaded.
-lotus daemon --import-snapshot $SNAPSHOT_DIR/$SNAPSHOT_FILE --config /etc/lotus_config/mainnet.toml &
+lotus daemon --import-snapshot $SNAPSHOT_FILE --config /etc/lotus_config/mainnet.toml &
 
 trap 'error ${LINENO}' ERR
 trap 'exit_func 0' INT SIGINT
