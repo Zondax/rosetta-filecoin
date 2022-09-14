@@ -61,6 +61,7 @@ if [ -f "$SNAPSHOT_FILE" ] && [ -f "$SNAPSHOT_CHECK_FILE" ]; then
     if cmp --silent -- "$SNAPSHOT_CHECKSUM" "../$SNAPSHOT_CHECKSUM"; then
       echo -e "${BOLDW} The existing snapshot is the latest one ${code} ${OFF}"
       cd ../ && rm -rf ./test
+      checksum
       exit_func
     else
       echo -e "${BOLDW} The existing snapshot is not the latest one ${code} ${OFF}"
