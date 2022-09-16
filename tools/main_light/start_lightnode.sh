@@ -37,6 +37,8 @@ echo -e "${GRN}Running command: ${OFF}${BOLDW}lotus daemon $1 $2${OFF}"
 echo -e "${GRN}Using Lotus logger level:${OFF}${BOLDW} ${GOLOG_LOG_LEVEL} ${OFF}"
 
 if [ -f "$SNAPSHOT_FILE" ]; then
+  echo -e "${GRN}### Snapshot found!${OFF}"
+else
   error("Snapshot file not found!")
 fi
 
