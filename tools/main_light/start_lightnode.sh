@@ -39,7 +39,7 @@ echo -e "${GRN}Using Lotus logger level:${OFF}${BOLDW} ${GOLOG_LOG_LEVEL} ${OFF}
 if [ -f "$SNAPSHOT_FILE" ]; then
   echo -e "${GRN}### Snapshot found!${OFF}"
 else
-  error("Snapshot file not found!")
+  error "err" "Snapshot file not found!"
 fi
 
 lotus daemon --import-snapshot $SNAPSHOT_FILE --config /etc/lotus_config/mainnet.toml &
