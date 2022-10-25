@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "LOTUS | Starting..."
-sh ./commons/start_lotus.sh
+sh ./start_lotus.sh
 echo "LOTUS | Started!"
 
 if [[ -n "$MOCK_ACCOUNTS" ]]; then
