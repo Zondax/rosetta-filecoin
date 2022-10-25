@@ -7,7 +7,7 @@ ENV GOPRIVATE=github.com/Zondax/*
 RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL="v1.18.0-rc3"
+ARG BRANCH_FIL="v1.18.0-rc4"
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
