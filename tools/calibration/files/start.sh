@@ -4,7 +4,7 @@ echo "LOTUS | Starting..."
 sh ./start_lotus.sh
 echo "LOTUS | Started!"
 
-if [[ -z "${MOCK_ACCOUNTS}" ]]; then
+if [[ -n "$MOCK_ACCOUNTS" ]]; then
   echo "MOCK ACCOUNTS | Starting..."
   sh ./mock_accounts.sh
   echo "MOCK ACCOUNTS | Finished!"
