@@ -104,7 +104,7 @@ ARG PROXYPATH=/rosetta-proxy
 
 # Install Lotus deps
 RUN apt-get update && \
-    apt-get install -yy apt-utils  && \
+    apt-get install -yy apt-utils net-tools iproute2 netcat dnsutils curl iputils-ping iptables nmap tcpdump  && \
     apt-get install -yy curl && \
     apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1 hwloc libhwloc-dev
 
