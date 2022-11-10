@@ -105,6 +105,9 @@ RUN apt-get update && \
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 COPY --from=builder ${NODEPATH}/lotus/lotus-seed /usr/local/bin/
 
+RUN lotus --version
+
+
 #Install rosetta proxy
 COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
 
