@@ -54,7 +54,8 @@ RUN if [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils && \
-    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+    apt install mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config curl clang build-essential hwloc libhwloc-dev wget -y &&  \
+    apt upgrade -y
 
 RUN make 2k && make install
 
@@ -97,7 +98,8 @@ ARG PROXYPATH=/rosetta-proxy
 RUN apt-get update && \
     apt-get install -yy apt-utils  && \
     apt-get install -yy curl  && \
-    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1 hwloc libhwloc-dev
+    apt install mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config curl clang build-essential hwloc libhwloc-dev wget -y &&  \
+    apt upgrade -y
 
 # Install Lotus
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/

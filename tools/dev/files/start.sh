@@ -9,7 +9,7 @@ mkdir -p /root/.lotus && cp -fr /configFiles/* /root/.lotus
 chmod 0600 -R /root/.lotus
 
 lotus daemon --config /etc/lotus_config/config.toml --lotus-make-genesis=devgen.car --genesis-template=localnet.json --bootstrap=false&
-sleep 5
+sleep 20
 
 # Import test actors
 lotus wallet import /test_actor_1.key # t1d2xrzcslx7xlbbylc5c3d5lvandqw4iwl6epxba
