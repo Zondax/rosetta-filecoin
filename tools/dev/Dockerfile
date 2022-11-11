@@ -139,7 +139,7 @@ COPY ./tools/dev/files/test_actor_2.key /test_actor_2.key
 COPY ./tools/dev/files/test_actor_3.key /test_actor_3.key
 
 # Copy startup script
-COPY ./tools/dev/files/start.sh /start.sh
+COPY ./tools/dev/files/start.sh /tools/scripts/start.sh
 
 # Copy check lotus sync script
 COPY ./tools/check_lotus_sync.sh /usr/local/bin/
