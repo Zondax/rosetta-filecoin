@@ -19,12 +19,14 @@ DOCKER_IMAGE_LIGHT=zondax/rosetta-filecoin-light:latest
 DOCKER_DEVNET_IMAGE=zondax/filecoin-devnet:latest
 DOCKER_BUTTERFLY_IMAGE=zondax/filecoin-butterfly:latest
 DOCKER_CALIBRATION_IMAGE=zondax/filecoin-calibration:latest
+DOCKER_WALLABY_IMAGE=zondax/filecoin-wallaby:latest
 
 DOCKERFILE_MAIN=./tools/main/Dockerfile
 DOCKERFILE_LIGHT_MAIN=./tools/main_light/Dockerfile
 DOCKERFILE_DEVNET=./tools/dev/Dockerfile
 DOCKERFILE_BUTTERFLY=./tools/butterfly/Dockerfile
 DOCKERFILE_CALIBRATION=./tools/calibration/Dockerfile
+DOCKERFILE_WALLABY=./tools/wallaby/Dockerfile
 
 CONTAINER_NAME=lotusnode
 CONTAINER_DEVNET_NAME=filecoin-devnet
@@ -136,6 +138,10 @@ build_butterfly:
 build_calibration:
 	docker build -t $(DOCKER_CALIBRATION_IMAGE) -f $(DOCKERFILE_CALIBRATION) --build-arg TOKEN=${READ_TOKEN} .
 .PHONY: build_calibration
+
+build_wallaby:
+	docker build -t $(DOCKER_WALLABY_IMAGE) -f $(DOCKERFILE_WALLABY) --build-arg TOKEN=${READ_TOKEN} .
+.PHONY: build_wallaby
 
 rebuild:
 	docker build --no-cache -t $(DOCKER_IMAGE) -f $(DOCKERFILE_MAIN) .
