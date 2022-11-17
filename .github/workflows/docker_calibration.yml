@@ -2,7 +2,7 @@ name: Publish Calibration Docker Image with Tag
 on:
   push:
     tags:
-      - "calibration_*"
+      - "*.*.*-calibration"
 
 jobs:
   push_calibration_to_registry:
