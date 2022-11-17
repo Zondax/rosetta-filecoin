@@ -1,5 +1,5 @@
 # Create builder container
-FROM golang:1.18 as builder
+FROM golang:1.17 as builder
 
 # Configure token for reading private repos
 ARG TOKEN
@@ -7,13 +7,13 @@ ENV GOPRIVATE=github.com/Zondax/*
 RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL="v1.18.0"
+ARG BRANCH_FIL="experimental/fvm-m2"
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
-ARG BRANCH_PROXY="v1.1800.1"
+ARG BRANCH_PROXY="v1.1600.5"
 ARG COMMIT_HASH_PROXY=""
 ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
@@ -24,6 +24,32 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -yy apt-utils && \
     apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+
+# Clone filecoin-indexing-rosetta-proxy
+RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
+  		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are empty'; \
+  		exit 1; \
+    fi
+
+RUN if [ ! -z "${BRANCH_PROXY}" ] && [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
+		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are set'; \
+		exit 1; \
+	fi
+
+WORKDIR ${PROXYPATH}
+RUN git clone --recurse-submodules ${REPO_PROXY} ${PROXYPATH}
+
+RUN if [ ! -z "${BRANCH_PROXY}" ]; then \
+        echo "Checking out to proxy branch: ${BRANCH_PROXY}"; \
+  		git checkout ${BRANCH_PROXY}; \
+    fi
+
+RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
+		echo "Checking out to proxy commit: ${COMMIT_HASH_PROXY}"; \
+		git checkout ${COMMIT_HASH_PROXY}; \
+	fi
+
+RUN make build
 
 # Clone Lotus
 RUN if [ -z "${BRANCH_FIL}" ] && [ -z "${COMMIT_HASH_FIL}" ]; then \
@@ -53,7 +79,7 @@ RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 ENV RUSTFLAGS="-C target-cpu=native -g"
-ENV FFI_BUILD_FROM_SOURCE=1
+ENV FFI_BUILD_FROM_SOURCE=0
 ARG DISABLE_SYNC
 
 # This will disable sync by setting the number of sync workers to 0
@@ -63,39 +89,11 @@ RUN if [ ! -z $DISABLE_SYNC ]; then \
 		head -n 25 chain/sync_manager.go; \
 	fi
 
-RUN make build && make install
+RUN make wallabynet && make install
 
-
-# Clone filecoin-indexing-rosetta-proxy
-RUN if [ -z "${BRANCH_PROXY}" ] && [ -z "${COMMIT_HASH_PROXY}" ]; then \
-  		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are empty'; \
-  		exit 1; \
-    fi
-
-RUN if [ ! -z "${BRANCH_PROXY}" ] && [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
-		echo 'Error: Both BRANCH_PROXY and COMMIT_HASH_PROXY are set'; \
-		exit 1; \
-	fi
-
-WORKDIR ${PROXYPATH}
-RUN git clone --recurse-submodules ${REPO_PROXY} ${PROXYPATH}
-
-RUN if [ ! -z "${BRANCH_PROXY}" ]; then \
-        echo "Checking out to proxy branch: ${BRANCH_PROXY}"; \
-  		git checkout ${BRANCH_PROXY}; \
-    fi
-
-RUN if [ ! -z "${COMMIT_HASH_PROXY}" ]; then \
-		echo "Checking out to proxy commit: ${COMMIT_HASH_PROXY}"; \
-		git checkout ${COMMIT_HASH_PROXY}; \
-	fi
-
-RUN make build
-
-###################################################
 
 # Create final container
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ARG ROSETTA_PORT=8080
@@ -114,7 +112,14 @@ COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 RUN lotus --version
 
 # Copy config files
-COPY ./tools/main/config.toml /etc/lotus_config/mainnet.toml
+COPY ./tools/wallaby/files/rosetta_config.yaml /config.yaml
+COPY ./tools/wallaby/files/config.toml /etc/lotus_config/config.toml
+
+# Copy startup script
+COPY ./tools/wallaby/files/start.sh /start.sh
+
+# Copy check lotus sync script
+COPY ./tools/check_lotus_sync.sh /usr/local/bin/
 
 RUN mkdir -p /data/{node,storage}
 ENV LOTUS_PATH=/data/node/
@@ -129,13 +134,5 @@ ENV LOTUS_RPC_TOKEN=""
 EXPOSE $ROSETTA_PORT
 EXPOSE $LOTUS_API_PORT
 
-#Copy entrypoint script
-COPY ./tools/main_light/start_lightnode.sh /
-COPY ./tools/main_light/download_snapshot.sh /
-
-# Copy check lotus sync script
-COPY ./tools/check_lotus_sync.sh /usr/local/bin/
-
-ENTRYPOINT ["/start_lightnode.sh"]
+ENTRYPOINT ["/start.sh"]
 CMD ["",""]
-

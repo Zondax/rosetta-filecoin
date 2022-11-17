@@ -1,0 +1,6 @@
+use_cached_traces: false
+trace_bucket: ""
+data_store:
+  user: ""
+  password: ""
+  url: "127.0.0.1:12121"

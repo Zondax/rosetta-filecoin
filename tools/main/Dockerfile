@@ -1,5 +1,5 @@
 # Create builder container
-FROM golang:1.17 as builder
+FROM golang:1.18.4 as builder
 
 # Configure token for reading private repos
 ARG TOKEN
@@ -7,13 +7,13 @@ ENV GOPRIVATE=github.com/Zondax/*
 RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL="v1.16.1"
+ARG BRANCH_FIL="v1.18.0"
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
-ARG BRANCH_PROXY="v1.1600.5"
+ARG BRANCH_PROXY="v1.1800.1"
 ARG COMMIT_HASH_PROXY=""
 ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
@@ -104,7 +104,7 @@ ARG PROXYPATH=/rosetta-proxy
 
 # Install Lotus deps
 RUN apt-get update && \
-    apt-get install -yy apt-utils  && \
+    apt-get install -yy apt-utils net-tools iproute2 netcat dnsutils curl iputils-ping iptables nmap tcpdump  && \
     apt-get install -yy curl && \
     apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1 hwloc libhwloc-dev
 

@@ -2,7 +2,7 @@ name: Publish Butterfly Docker Image with Tag
 on:
   push:
     tags:
-      - "butterfly_*"
+      - "*.*.*-butterfly"
 
 jobs:
   push_butterfly_to_registry:
