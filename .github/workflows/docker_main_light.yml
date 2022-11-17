@@ -2,7 +2,7 @@ name: Publish Mainnet Docker Image with Tag
 on:
   push:
     tags:
-      - "main_light_*"
+      - "*.*.*-main-light"
 
 jobs:
   push_to_registry:

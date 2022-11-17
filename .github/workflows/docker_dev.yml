@@ -2,7 +2,7 @@ name: Publish Devnet Docker Image with Tag
 on:
   push:
     tags:
-      - "dev_*"
+      - "*.*.*-dev"
 
 jobs:
   push_devnet_to_registry:

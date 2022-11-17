@@ -1,7 +1,6 @@
 name: Publish Calibration Docker Image with Tag
 on:
   push:
-    branches: [feat/githubaction]
     tags:
       - "*.*.*-calibration"
 
