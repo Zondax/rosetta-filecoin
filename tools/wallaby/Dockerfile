@@ -1,5 +1,5 @@
 # Create builder container
-FROM golang:1.17 as builder
+FROM golang:1.18.6 as builder
 
 # Configure token for reading private repos
 ARG TOKEN
@@ -7,13 +7,13 @@ ENV GOPRIVATE=github.com/Zondax/*
 RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL="experimental/fvm-m2"
+ARG BRANCH_FIL="release/fevm-wallaby"
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
-ARG BRANCH_PROXY="v1.1600.5"
+ARG BRANCH_PROXY="v1.1800.0"
 ARG COMMIT_HASH_PROXY=""
 ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
@@ -73,20 +73,6 @@ RUN if [ ! -z "${BRANCH_FIL}" ]; then \
 RUN if [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 		echo "Checking out to Lotus commit: ${COMMIT_HASH_FIL}"; \
 		git checkout ${COMMIT_HASH_FIL}; \
-	fi
-
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-ENV PATH="/root/.cargo/bin:${PATH}"
-
-ENV RUSTFLAGS="-C target-cpu=native -g"
-ENV FFI_BUILD_FROM_SOURCE=0
-ARG DISABLE_SYNC
-
-# This will disable sync by setting the number of sync workers to 0
-RUN if [ ! -z $DISABLE_SYNC ]; then \
-		echo "\n\n\nWARNING : Patching + disabling synchronization\n\n\n"; \
-		sed -i -E 's/^[ \t]*MaxSyncWorkers[ \t]*=[ \t]*[0-9]*$/MaxSyncWorkers=0/g' chain/sync_manager.go; \
-		head -n 25 chain/sync_manager.go; \
 	fi
 
 RUN make wallabynet && make install
