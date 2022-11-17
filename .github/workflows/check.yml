@@ -64,3 +64,14 @@ jobs:
           export READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
           make build_calibration
 
+  build_wallaby:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build Lotus Wallaby
+        run: |
+          export READ_TOKEN=${{ secrets.PECORINO_READ_TOKEN }}
+          make build_wallaby
