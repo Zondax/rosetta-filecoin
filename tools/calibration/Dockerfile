@@ -122,7 +122,6 @@ COPY ./tools/calibration/files/test_actor_3.key /test_actor_3.key
 
 # Copy startup script
 COPY ./tools/calibration/files/start.sh /start.sh
-COPY ./tools/calibration/files/start_lotus.sh /start_lotus.sh
 
 # Copy check lotus sync script
 COPY ./tools/check_lotus_sync.sh /usr/local/bin/
