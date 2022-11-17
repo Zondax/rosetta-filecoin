@@ -1,5 +1,5 @@
 # Create builder container
-FROM golang:1.17 as builder
+FROM golang:1.18 as builder
 
 # Configure token for reading private repos
 ARG TOKEN
@@ -7,13 +7,13 @@ ENV GOPRIVATE=github.com/Zondax/*
 RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
-ARG BRANCH_FIL="v1.16.1"
+ARG BRANCH_FIL="v1.18.0"
 ARG COMMIT_HASH_FIL=""
 ARG REPO_FIL=https://github.com/filecoin-project/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
-ARG BRANCH_PROXY="v1.1600.5"
+ARG BRANCH_PROXY="v1.1800.1"
 ARG COMMIT_HASH_PROXY=""
 ARG REPO_PROXY=https://github.com/Zondax/filecoin-indexing-rosetta-proxy.git
 ARG PROXYPATH=/rosetta-proxy
@@ -54,7 +54,8 @@ RUN if [ ! -z "${COMMIT_HASH_FIL}" ]; then \
 # Install Lotus deps
 RUN apt-get update && \
     apt-get install -yy apt-utils && \
-    apt-get install -yy gcc git bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
+    apt install mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config curl clang build-essential hwloc libhwloc-dev wget -y &&  \
+    apt upgrade -y
 
 RUN make 2k && make install
 
@@ -97,11 +98,15 @@ ARG PROXYPATH=/rosetta-proxy
 RUN apt-get update && \
     apt-get install -yy apt-utils  && \
     apt-get install -yy curl  && \
-    apt-get install -yy bzr jq pkg-config mesa-opencl-icd ocl-icd-opencl-dev wget libltdl7 libnuma1 hwloc libhwloc-dev
+    apt install mesa-opencl-icd ocl-icd-opencl-dev gcc git bzr jq pkg-config curl clang build-essential hwloc libhwloc-dev wget -y &&  \
+    apt upgrade -y
 
 # Install Lotus
 COPY --from=builder /usr/local/bin/lotus* /usr/local/bin/
 COPY --from=builder ${NODEPATH}/lotus/lotus-seed /usr/local/bin/
+
+RUN lotus --version
+
 
 #Install rosetta proxy
 COPY --from=builder ${PROXYPATH}/filecoin-indexing-rosetta-proxy /usr/local/bin
@@ -134,10 +139,14 @@ COPY ./tools/dev/files/test_actor_2.key /test_actor_2.key
 COPY ./tools/dev/files/test_actor_3.key /test_actor_3.key
 
 # Copy startup script
-COPY ./tools/dev/files/start.sh /start.sh
+COPY ./tools/dev/files/start.sh /tools/scripts/start.sh
 
 # Copy check lotus sync script
 COPY ./tools/check_lotus_sync.sh /usr/local/bin/
+
+RUN mkdir -p /data/{node,storage}
+ENV LOTUS_PATH=/data/node/
+ENV LOTUS_STORAGE_PATH=/data/storage/
 
 ENTRYPOINT ["/start.sh"]
 CMD ["",""]
