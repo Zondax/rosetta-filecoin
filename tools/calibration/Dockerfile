@@ -126,7 +126,6 @@ COPY ./tools/calibration/files/start.sh /start.sh
 # Copy check lotus sync script
 COPY ./tools/check_lotus_sync.sh /usr/local/bin/
 
-RUN mkdir -p /data/{node,storage}
 ENV LOTUS_PATH=/data/node/
 ENV LOTUS_STORAGE_PATH=/data/storage/
 
