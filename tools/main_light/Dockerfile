@@ -116,7 +116,8 @@ RUN lotus --version
 # Copy config files
 COPY ./tools/main/config.toml /etc/lotus_config/mainnet.toml
 
-RUN mkdir -p /data/{node,storage}
+RUN mkdir -p /data/node
+RUN mkdir -p /data/storage
 ENV LOTUS_PATH=/data/node/
 ENV LOTUS_STORAGE_PATH=/data/storage/
 
