@@ -27,6 +27,10 @@ exit_func() {
   exit "$1"
 }
 
+# Download latest snapshot
+echo -e "${GRN}Checking for latest snapshot ... ${OFF}"
+/bin/bash /download_snapshot.sh
+
 # From lotus v1.16 and on we need to enable this flag to have a full trace output
 export LOTUS_VM_ENABLE_TRACING=1
 export LOTUS_USE_FVM_TO_SYNC_MAINNET_V15=1
