@@ -53,6 +53,8 @@ full_download() {
   echo -e "${GRN}### Finished downloading latest snapshot${OFF}"
 }
 
+mkdir -p $SNAPSHOT_DIR
+
 if [ -f "$SNAPSHOT_FILE" ] && [ -f "$SNAPSHOT_CHECK_FILE" ]; then
     echo -e "${GRN} Checking if the existing snapshot is the latest one ... ${code} ${OFF}"
     mkdir ./test && cd ./test
