@@ -1,5 +1,5 @@
 # Create builder container
-FROM golang:1.18.6 as builder
+FROM golang:1.18.8 as builder
 
 # Configure token for reading private repos
 ARG TOKEN
