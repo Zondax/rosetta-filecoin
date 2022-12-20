@@ -8,8 +8,8 @@ RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
 ARG BRANCH_FIL=""
-ARG COMMIT_HASH_FIL="a971868be49e549ee4435a9865402f8a7c35a0f3"
-ARG REPO_FIL=https://github.com/filecoin-project/lotus
+ARG COMMIT_HASH_FIL="f8-wallaby-carbonado-r10.0"
+ARG REPO_FIL=https://github.com/Factor8Solutions/lotus
 ARG NODEPATH=/lotus
 
 # set BRANCH_PROXY or COMMIT_HASH_PROXY
