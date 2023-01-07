@@ -25,7 +25,7 @@ exit_func() {
 }
 
 # Set aggressiveness of golang's GC
-export GOGC=10
+export GOGC=80
 
 # From lotus v1.16 and on we need to enable this flag to have a full trace output
 export LOTUS_VM_ENABLE_TRACING=1
