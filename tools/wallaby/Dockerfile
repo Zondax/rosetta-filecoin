@@ -8,7 +8,7 @@ RUN echo "machine github.com login $TOKEN password x-oauth-basic" > ~/.netrc
 
 # set BRANCH_FIL or COMMIT_HASH_FIL
 ARG BRANCH_FIL=""
-ARG COMMIT_HASH_FIL="f8-wallabynet-carbonado-r10-p1"
+ARG COMMIT_HASH_FIL="f8-wallaby-latest"
 ARG REPO_FIL=https://github.com/Factor8Solutions/lotus
 ARG NODEPATH=/lotus
 
